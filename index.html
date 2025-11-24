@@ -1,1 +1,210 @@
-<h1>Welcome to Weicheng Gao Homepage</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weicheng Gao's Academic Homepage</title>
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+        .section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .section-white {
+            background-color: #ffffff;
+        }
+        .section-lightgreen {
+            background-color: #f0f5f0; /* A very soft, low-saturation green */
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e8f0e8; /* A slightly richer, soft green for the hero */
+            padding: 0 50px;
+        }
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 70px; /* --- Increased from 40px to create more space --- */
+            width: 100%;
+            max-width: 1200px;
+        }
+        .hero-text {
+            text-align: left;
+        }
+        .hero h1 {
+            font-size: 5.5rem;
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        .hero-photo {
+            width: 544px;
+            height: 722px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 8px;
+        }
+        .hero-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-buttons {
+            margin-top: 30px;
+        }
+        .btn {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            margin-right: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: transparent;
+            color: #ffffff; /* Text turns white on hover */
+            border-color: #ffffff; /* Border turns white to be visible */
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #a3b899; /* A muted green for the underline */
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        a {
+            color: #556B2F; /* Dark Olive Green for links */
+            text-decoration: none;
+        }
+        /* Style button links specifically so they don't inherit the green link color */
+        a.btn {
+            color: #333;
+        }
+        a.btn:hover {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .publications li {
+            margin-bottom: 15px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Weicheng Gao<br>Research</h1>
+                <div class="hero-buttons">
+                    <a href="https://github.com/JoeyBGOfficial" target="_blank" class="btn">GitHub</a>
+                    <a href="https://radar.bit.edu.cn/szdw/jsfc/gyjsjs/tzld1/bb18d2ab2b5745cfa4189518b91213f4.htm" target="_blank" class="btn">Mentor</a>
+                </div>
+            </div>
+            <img src="GWC.jpg" alt="Photo of Weicheng Gao" class="hero-photo">
+        </div>
+    </div>
+
+    <!-- About Me Section -->
+    <div class="section section-white">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>
+                Insert your biography here. You can introduce your research interests, academic background, and other relevant information. 
+                This text helps visitors get a quick overview of who you are. Try to be both professional and approachable.
+            </p>
+            <p>
+                Feel free to link to my <a href="#">full CV</a> or <a href="mailto:your-email@example.com">send me an email</a>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Publications Section -->
+    <div class="section section-lightgreen">
+        <div class="container">
+            <h2>Publications</h2>
+            <ul class="publications">
+                <li>
+                    <strong>[Paper Title 1]</strong>, Author List, <i>Journal/Conference Name</i>, Year. <a href="#">[Link]</a>
+                </li>
+                <li>
+                    <strong>[Paper Title 2]</strong>, Author List, <i>Journal/Conference Name</i>, Year. <a href="#">[Link]</a>
+                </li>
+                <li>
+                    <strong>[Paper Title 3]</strong>, Author List, <i>Journal/Conference Name</i>, Year. <a href="#">[Link]</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Research Section -->
+    <div class="section section-white">
+        <div class="container">
+            <h2>Research</h2>
+            <p>
+                Describe your research projects here. You can create subsections for each project with a brief description and links to relevant papers or code.
+            </p>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="section section-lightgreen">
+        <div class="container">
+            <h2>Contact</h2>
+            <p>
+                Address: [Your Address]
+            </p>
+            <p>
+                Email: <a href="mailto:your-email@example.com">[your-email@example.com]</a>
+            </p>
+            <p>
+                You can also find me on: <a href="#">LinkedIn</a>, <a href="#">Google Scholar</a>, <a href="#">GitHub</a>
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Weicheng Gao. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
