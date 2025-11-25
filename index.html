@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weicheng Gao's Academic Homepage</title>
     <style>
+        /* --- Scroll Snap Styles --- */
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
             margin: 0;
@@ -12,29 +18,74 @@
             line-height: 1.6;
             color: #333;
         }
-        .section {
-            padding: 60px 20px;
-            text-align: center;
+
+        .snap-section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 80px 20px; /* Increased top padding to avoid overlap with header */
         }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 50px;
+            box-sizing: border-box;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 35px;
+        }
+        header nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+        header nav a:hover {
+            color: #556B2F;
+        }
+
         .section-white {
             background-color: #ffffff;
         }
         .section-lightgreen {
-            background-color: #f0f5f0; /* A very soft, low-saturation green */
+            background-color: #f0f5f0;
         }
         .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #e8f0e8; /* A slightly richer, soft green for the hero */
-            padding: 0 50px;
+            background-color: #e8f0e8;
         }
         .hero-content {
             display: flex;
             align-items: center;
             justify-content: space-around;
-            gap: 70px; /* --- Increased from 40px to create more space --- */
+            gap: 70px;
             width: 100%;
             max-width: 1200px;
         }
@@ -60,7 +111,6 @@
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-        
         .hero-buttons {
             margin-top: 30px;
         }
@@ -79,47 +129,167 @@
         }
         .btn:hover {
             background-color: transparent;
-            color: #ffffff; /* Text turns white on hover */
-            border-color: #ffffff; /* Border turns white to be visible */
+            color: #ffffff;
+            border-color: #ffffff;
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        
         .container {
             max-width: 900px;
-            margin: 0 auto;
             text-align: left;
+            width: 100%;
         }
         h2 {
             font-size: 2.5rem;
             margin-bottom: 20px;
             color: #333;
-            border-bottom: 3px solid #a3b899; /* A muted green for the underline */
+            border-bottom: 3px solid #a3b899;
             padding-bottom: 10px;
             display: inline-block;
         }
+        h3 {
+            font-size: 1.6rem;
+            color: #556B2F;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 70px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .about-photo {
+            width: 350px;
+            height: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .about-text {
+            flex-grow: 1;
+        }
+
         p {
             font-size: 1.1rem;
             margin-bottom: 15px;
         }
         a {
-            color: #556B2F; /* Dark Olive Green for links */
+            color: #556B2F;
             text-decoration: none;
         }
-        /* Style button links specifically so they don't inherit the green link color */
-        a.btn {
+        a.btn, header nav a {
             color: #333;
         }
-        a.btn:hover {
-            color: #ffffff;
+        a.btn:hover, header nav a:hover {
             text-decoration: none;
+        }
+        a.btn:hover {
+             color: #ffffff;
+        }
+        header nav a:hover {
+            color: #556B2F;
         }
         a:hover {
             text-decoration: underline;
         }
-        .publications li {
-            margin-bottom: 15px;
+        ul {
+            padding-left: 0;
+            list-style: none;
         }
+        li {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        #publications li {
+            position: relative;
+            padding-left: 280px; 
+        }
+        #publications li strong {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 270px;
+            text-align: left;
+        }
+        
+        #activities ul, #awards ul {
+            padding-left: 20px;
+            list-style: disc;
+        }
+        #activities li p, #awards li p {
+            margin: 0;
+        }
+
+
+        .paper-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        .paper-img {
+            width: 200px; 
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .paper-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .activity-banner-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            margin-bottom: 40px;
+        }
+        .activity-banner-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        #contact .container {
+            text-align: center;
+        }
+        #contact h2 {
+            display: inline-block;
+        }
+        
+        .homepage-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 20px;
+        }
+        .homepage-img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .homepage-link:hover .homepage-img {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .homepage-caption {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+
         footer {
             background-color: #333;
             color: #fff;
@@ -130,8 +300,23 @@
 </head>
 <body>
 
-    <!-- Hero Section -->
-    <div class="hero">
+    <header>
+        <div class="header-content">
+            <nav>
+                <ul>
+                    <li><a href="#home">Home (首页)</a></li>
+                    <li><a href="#about">About Me (个人简介)</a></li>
+                    <li><a href="#publications">Publications (学术成果)</a></li>
+                    <li><a href="#activities">Academic Activities (学术活动)</a></li>
+                    <li><a href="#awards">Awards & Titles (奖励及荣誉)</a></li>
+                    <li><a href="#contact">Contact (联系方式)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 1. Home Section -->
+    <div id="home" class="snap-section hero">
         <div class="hero-content">
             <div class="hero-text">
                 <h1>Weicheng Gao<br>Research</h1>
@@ -144,60 +329,325 @@
         </div>
     </div>
 
-    <!-- About Me Section -->
-    <div class="section section-white">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>
-                Insert your biography here. You can introduce your research interests, academic background, and other relevant information. 
-                This text helps visitors get a quick overview of who you are. Try to be both professional and approachable.
-            </p>
-            <p>
-                Feel free to link to my <a href="#">full CV</a> or <a href="mailto:your-email@example.com">send me an email</a>.
-            </p>
+    <!-- 2. About Me Section -->
+    <div id="about" class="snap-section section-white">
+        <div class="about-content">
+            <img src="BIT.png" alt="Beijing Institute of Technology Logo" class="about-photo">
+            <div class="about-text">
+                <h2>About Me (个人简介)</h2>
+
+                <h3>Education Experience (教育经历)</h3>
+                <p>
+                    2018.09~2022.06, Beijing Institute of Technology (BIT), Xu Teli Class of Excellence, Bachelor's Degree
+                </p>
+                <p>
+                    2018.09~2022.06，北京理工大学，徐特立英才班，本科
+                </p>
+                <p>
+                    2022.09~Now, BIT, School of Information and Electronics, Doctor's Degree
+                </p>
+                <p>
+                    2022.09~至今，北京理工大学，信息与电子学院，博士
+                </p>
+
+                <h3>Research & Team (研究方向与团队)</h3>
+                <p>
+                    I am a proud member of the Radar Research Institute at BIT, guided by professor XiaopengYang. My research topic includes mathematical and modeling theory of signal processing, through-the-wall radar human activity recognition. Our team is dedicated to advancing the frontiers of urban radar technologies and applications.
+                </p>
+                <p>
+                    我是北京理工大学雷达技术研究院的博士生，师从杨小鹏教授。我的研究方向为信号处理中的数学与建模理论，穿墙雷达人体行为识别技术。我们团队致力于拓展城市雷达技术与应用的研究边界。
+                </p>
+            </div>
         </div>
     </div>
 
-    <!-- Publications Section -->
-    <div class="section section-lightgreen">
+    <!-- 3. Publications Section -->
+    <div id="publications" class="snap-section section-lightgreen">
         <div class="container">
-            <h2>Publications</h2>
-            <ul class="publications">
+            <!-- Paper Image Gallery -->
+            <div class="paper-gallery">
+                <img src="Paper1.png" alt="Cover of Paper 1" class="paper-img">
+                <img src="Paper2.png" alt="Cover of Paper 2" class="paper-img">
+                <img src="Paper3.png" alt="Cover of Paper 3" class="paper-img">
+                <img src="Paper4.png" alt="Cover of Paper 4" class="paper-img">
+            </div>
+
+            <h2>Publications (学术成果)</h2>
+
+            <h3>Published Paper (发表论文)</h3>
+<ul>
+    <li><strong>[1] (IEEE TGRS, SCI JCR Q1)</strong>W. Gao, X. Yang, X. Qu and T. Lan, "TWR-MCAE: A Data Augmentation Method for Through-the-Wall Radar Human Motion Recognition," in <i>IEEE Transactions on Geoscience and Remote Sensing</i>, vol. 60, pp. 1-17, 2022. <a href="https://ieeexplore.ieee.org/document/9915621">[Link]</a></li>
+    <li><strong>[2] (IEEE TGRS, SCI JCR Q1)</strong>X. Qu, W. Gao, H. Meng, Y. Zhao and X. Yang, "Indoor Human Behavior Recognition Method Based on Wavelet Scattering Network and Conditional Random Field Model," in <i>IEEE Transactions on Geoscience and Remote Sensing</i>, vol. 61, pp. 1-15, 2023. <a href="https://ieeexplore.ieee.org/document/10124443">[Link]</a></li>
+    <li><strong>[3] (IEEE IoT, SCI JCR Q1)</strong>X. Yang, W. Gao, X. Qu, P. Yin, H. Meng and A. E. Fathy, "A Lightweight Multiscale Neural Network for Indoor Human Activity Recognition Based on Macro and Micro-Doppler Features," in <i>IEEE Internet of Things Journal</i>, vol. 10, no. 24, pp. 21836-21854, 2023. <a href="https://ieeexplore.ieee.org/document/10206026">[Link]</a></li>
+    <li><strong>[4] (IEEE TMTT, SCI JCR Q1)</strong>X. Yang, W. Gao, X. Qu, Z. Ma and H. Zhang, "Through-the-Wall Radar Human Activity Micro-Doppler Signature Representation Method Based on Joint Boulic-Sinusoidal Pendulum Model," in <i>IEEE Transactions on Microwave Theory and Techniques</i>, vol. 73, no. 2, pp. 1248-1263, 2025. <a href="https://ieeexplore.ieee.org/document/10644143">[Link]</a></li>
+    <li><strong>[5] (IEEE TAES, SCI JCR Q1)</strong>X. Yang, W. Gao, X. Qu and H. Meng, "Generalizable Indoor Human Activity Recognition Method Based on Micro-Doppler Corner Point Cloud and Dynamic Graph Learning," in <i>IEEE Transactions on Aerospace and Electronics Systems</i>, vol. 61, no. 2, pp. 5195-5209, 2024. <a href="https://ieeexplore.ieee.org/document/10799206">[Link]</a></li>
+    <li><strong>[6] (IEEE SPL, SCI, JCR Q2)</strong>W. Gao, X. Qu, H. Meng, X. Sun and X. Yang, "Adaptive Micro-Doppler Corner Feature Extraction Method Based on Difference of Gaussian Filter and Deformable Convolution," in <i>IEEE Signal Processing Letters</i>, vol. 31, pp. 860-864, 2024. <a href="https://ieeexplore.ieee.org/document/10473202">[Link]</a></li>
+    <li><strong>[7] (IEEE SPL, SCI, JCR Q2)</strong>W. Gao, S. Liu, J. Wang, X. Qu and X. Yang, "MIMO Through-the-Wall Radar Micro-Doppler Signature Augmentation Method Based on Multi-Channel Information Fusion," in <i>IEEE Signal Processing Letters</i>, 2025.
+    <li><strong>[8] (APSIPA, EI)</strong>W. Gao, X. Yang, X. Qu, J. Liao, Z. Yin and D. Zhang, "Indoor Human Motion Recognition Method Based on Kernel-Distance Doppler Velocity Estimation and Lightweight Network," in <i>Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC)</i>, Chiang Mai, Thailand, 2022. <a href="https://ieeexplore.ieee.org/document/9980106">[Link]</a></li>
+    <li><strong>[9] (IEEE MAPE, EI)</strong>W. Gao, X. Yang, T. Lan, X. Qu and J. Gong, "Triple-Link Fusion Decision Method for Through-the-Wall Radar Human Motion Recognition," in <i>IEEE International Symposium on Microwave, Antenna, Propagation and EMC Technologies for Wireless Communications (MAPE)</i>, Chengdu, China, 2022. <a href="https://ieeexplore.ieee.org/document/9935178">[Link]</a></li>
+    <li><strong>[10] (IEEE ICSIDP, EI)</strong>W. Gao, X. Qu and X. Yang, "Generalization Ability Analysis of Through-the-Wall Radar Human Activity Recognition," in <i>IEEE International Conference on Signal, Information and Data Processing (ICSIDP)</i>, Zhuhai, China, 2024. <a href="https://ieeexplore.ieee.org/document/10867997">[Link]</a></li>
+    <li><strong>[11] (雷达学报, EI)</strong>杨小鹏, 高炜程, 渠晓东. 基于微多普勒角点特征与Non-Local机制的穿墙雷达人体步态异常终止行为辨识技术[J]. <i>雷达学报</i>, 2024, 13(1). <a href="https://radars.ac.cn/article/doi/10.12000/JR23181">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Based-on-M-D-Corner-Feature-and-Non-Local-Net">[GitHub]</a></li>
+    <li><strong>[12] (计算机工程与应用, EI)</strong>杨小鹏, 高炜程, 渠晓东, 兰天, 龚俊波. 多链路全连接条件随机场的穿墙雷达人体行为识别方法[J]. <i>计算机工程与应用</i>, 2022, 58.
+    <li><strong>[13] (IEEE TAES, SCI JCR Q1)</strong>X. Yang, H. Meng, Z. Ma, X. Qu, W. Gao and Y. Zhao, "Azimuth Sidelobe Suppression Method for Through-the-Wall Radar Based on Phase Nonuniform Quantized Coherence Factor," in <i>IEEE Transactions on Aerospace and Electronic Systems</i>, vol. 61, no. 3, pp. 7140-7152, 2025. <a href="https://ieeexplore.ieee.org/document/10852205">[Link]</a></li>
+    <li><strong>[14] (IEEE IoT, SCI JCR Q1)</strong>X. Yang, H. Meng, X. Qu, W. Gao and F. Liu, "Multipath Ghost Recognition and Suppression Method Based on Template Matching for Indoor Human Detection and Location," in <i>IEEE Internet of Things Journal</i>, vol. 12, no. 14, pp. 27280-27290, 2025. <a href="https://ieeexplore.ieee.org/document/10970020">[Link]</a></li>
+    <li><strong>[15] (IEEE SPL, SCI JCR Q2)</strong>X. Yang, H. Meng, X. Qu, W. Gao, "Through-the-Wall Radar Imaging Grating-lobe and Sidelobe Suppression Method Based on Imaginary Sign Coherence Factor," in <i>IEEE Signal Processing Letters</i>, vol. 31, pp. 2120-2124, 2024. <a href="https://ieeexplore.ieee.org/document/10634754">[Link]</a></li>
+    <li><strong>[16] (IEEE ICSIDP, EI)</strong>H. Meng, X. Yang, X. Qu, W. Gao, Z. Ma and D. Shi, "A Through-the-Wall Radar Azimuth Sidelobe Suppression Based on Multibit Coherence Factor," in <i>IEEE International Conference on Signal, Information and Data Processing (ICSIDP)</i>, Zhuhai, China, 2024. <a href="https://ieeexplore.ieee.org/document/10868957">[Link]</a></li>
+    <li><strong>[17] (IEEE ICSIDP, EI)</strong>J. Feng, Y. Xu, K. Dong, S. Zhao, M. Wang and W. Gao, "Human Activity Micro-Doppler Corner Feature Representation Method Based on Dual-Threshold Harris Extractor for Through-the-Wall Radar," in <i>IEEE International Conference on Signal, Information and Data Processing (ICSIDP)</i>, Zhuhai, China, 2024. <a href="https://ieeexplore.ieee.org/document/10868920">[Link]</a></li>
+    <li><strong>[18] (雷达学报, EI)</strong>兰天, 盛世文, 孙熙韬, 高炜程, 杨小鹏. 探地雷达多阶段级联U-Net墙内小目标三维重建方法[J]. <i>雷达学报</i>, 2024, 13(6). <a href="https://radars.ac.cn/article/doi/10.12000/JR24163">[Link]</a></li>
+</ul>
+
+            <h3>Research in Interest (兴趣研究)</h3>
+<ul>
+    <li><strong>[1] (arXiv Preprint)</strong>W. Gao, "Through-the-Wall Radar Human Activity Recognition WITHOUT Using Neural Networks," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2506.05169">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Without-Using-Neural-Networks">[GitHub]</a></li>
+    <li><strong>[2] (arXiv Preprint)</strong>W. Gao, "Exploration of Low-Cost but Accurate Radar-Based Human Motion Direction Determination," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2507.22567">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Low-Cost-Accurate-Radar-Based-Human-Motion-Direction-Determination">[GitHub]</a></li>
+    <li><strong>[3] (arXiv Preprint)</strong>W. Gao, "RadHARSimulator V1: Model-Based FMCW Radar Human Activity Recognition Simulator," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2509.06751">[Link]</a> <a href="https://github.com/JoeyBGOfficial/RadHARSimulatorV1-Model-Based-FMCW-Radar-Human-Activity-Recognition-Simulator">[GitHub]</a></li>
+    <li><strong>[4] (arXiv Preprint)</strong>W. Gao, "RadHARSimulator V2: Video to Doppler Generator," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2511.09022">[Link]</a> <a href="https://github.com/JoeyBGOfficial/RadHARSimulatorV2-Video-to-Doppler-Generator">[GitHub]</a></li>
+</ul>
+
+        </div>
+    </div>
+
+    <!-- 4. Academic Activities Section -->
+    <div id="activities" class="snap-section section-white">
+        <div class="container">
+            <img src="Activity.png" alt="Photo of an academic activity" class="activity-banner-img">
+            <h2>Academic Activities (学术活动)</h2>
+
+            <h3>Invited Talks & Forums (特邀报告与论坛)</h3>
+            <ul>
                 <li>
-                    <strong>[Paper Title 1]</strong>, Author List, <i>Journal/Conference Name</i>, Year. <a href="#">[Link]</a>
+                    <p><strong>Invited Talk</strong>, Radar Perception Forum, "New Youth in Autonomous Driving" Lecture Series by Zhidx.com, 2024.</p>
+                    <p>2024年智东西“自动驾驶新青年讲座”雷达感知论坛，作<strong>特邀报告</strong>。</p>
                 </li>
                 <li>
-                    <strong>[Paper Title 2]</strong>, Author List, <i>Journal/Conference Name</i>, Year. <a href="#">[Link]</a>
+                    <p>Session Report, Doctoral Forum on "Multi-source Information Sensing," Chinese Institute of Electronics, 2024 (<strong>Best Report Award</strong>).</p>
+                    <p>2024年中国电子学会“多源信息感知”博士生论坛，作分会场报告，获<strong>最佳报告奖</strong>。</p>
                 </li>
                 <li>
-                    <strong>[Paper Title 3]</strong>, Author List, <i>Journal/Conference Name</i>, Year. <a href="#">[Link]</a>
+                    <p>Session Report, IEEE International Conference on Signal, Information and Data Processing (ICSIDP), 2024 (<strong>Best Paper Award</strong>).</p>
+                    <p>2024年IEEE ICSIDP国际会议，作分会场报告，获<strong>最佳论文奖</strong>。</p>
+                </li>
+                <li>
+                    <p>Session Report, The 5th Doctoral Forum of Journal of Radars, 2025 (<strong>Best Report Award</strong>).</p>
+                    <p>2025年雷达学报第五届博士论坛，作分会场报告，获<strong>最佳报告奖</strong>。</p>
+                </li>
+                <li>
+                    <p>Session Report, Xu Teli Academic Forum, Beijing Institute of Technology, 2023 (<strong>Best Paper Award</strong>).</p>
+                    <p>2023年北理工徐特立学术论坛，作分会场报告，获<strong>最佳论文奖</strong>。</p>
+                </li>
+                <li>
+                    <p>Session Report, The 4th Doctoral Forum of Journal of Radars, 2024 (<strong>Excellent Report Award</strong>).</p>
+                    <p>2024年雷达学报第四届博士论坛，作分会场报告，获<strong>优秀报告奖</strong>。</p>
+                </li>
+                 <li>
+                    <p>Session Report, Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC), 2022.</p>
+                    <p>2022年APSIPA国际会议，作分会场报告。</p>
+                </li>
+                <li>
+                    <p>Session Report, IEEE International Symposium on Microwave, Antenna, Propagation and EMC Technologies (MAPE), 2022.</p>
+                    <p>2022 年IEEE MAPE国际会议，作分会场报告。</p>
+                </li>
+                <li>
+                    <p>Session Report, Xu Teli Academic Forum, Beijing Institute of Technology, 2022.</p>
+                    <p>2022年北理工徐特立学术论坛，作分会场报告。</p>
+                </li>
+            </ul>
+
+            <h3>Cooperation Presentations & Community (合作报告与社区服务)</h3>
+            <ul>
+                <li>
+                    <p>Founder, "Signal, Machine Learning, and Radar" Column on Zhihu Technology, awarded "<strong>Haiyan Project</strong>" High-Quality Creator.</p>
+                    <p>知乎科技领域《信号，机器学习与雷达》系列专栏创始人，获“<strong>海盐计划</strong>”优质创作者称号。</p>
+                </li>
+                <li>
+                    <p>Assisted Mentor with Keynote Report, IET International Radar Conference, 2023.</p>
+                    <p>2023年IET国际雷达会议，协助导师作大会报告。</p>
+                </li>
+                <li>
+                    <p>Assisted Mentor with Invited Talk, IET International Radar Conference, 2025.</p>
+                    <p>2025年IET国际雷达会议，协助导师作特邀报告。</p>
+                </li>
+                <li>
+                    <p>Assisted Mentor with Invited Talk, IEEE International Conference on ICSP (ICICSP), 2023.</p>
+                    <p>2023年IEEE ICICSP国际会议，协助导师作特邀报告。</p>
+                </li>
+                 <li>
+                    <p>Assisted Mentor with Invited Talk, Radar Future Conference, 2024.</p>
+                    <p>2024年雷达未来大会，协助导师作特邀报告。</p>
+                </li>
+                <li>
+                    <p>Assisted Mentor with Invited Talk, Electromagnetic Spectrum Conference, 2024.</p>
+                    <p>2024年电磁频谱大会，协助导师作特邀报告。</p>
+                </li>
+                 <li>
+                    <p>Assisted Mentor with Invited Talk, China Electronic Information Conference, 2025.</p>
+                    <p>2025年电子信息年会，协助导师作特邀报告。</p>
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Research Section -->
-    <div class="section section-white">
+    <!-- 5. Awards & Titles Section -->
+    <div id="awards" class="snap-section section-lightgreen">
         <div class="container">
-            <h2>Research</h2>
-            <p>
-                Describe your research projects here. You can create subsections for each project with a brief description and links to relevant papers or code.
-            </p>
+            <h2>Awards & Titles (奖励及荣誉)</h2>
+            
+            <ul>
+                <li>
+                    <p></p>
+                    <p></p>
+                </li>
+                <li>
+                    <p><strong>First Prize</strong>, Technology Invention Award, China Radar Industry Association, 2023 (Rank 6).</p>
+                    <p>获2023年度中国雷达行业协会技术发明<strong>一等奖</strong>（序6）。</p>
+                </li>
+                <li>
+                    <p>Selected for the <strong>Young Professionals Program</strong>, IEEE.</p>
+                    <p>入选IEEE <strong>Young Professionals</strong>成员。</p>
+                </li>
+                <li>
+                    <p>Selected for the <strong>Reserve Talent Training Program for Science and Technology Innovation</strong>, China Association for Science and Technology.</p>
+                    <p>入选中国科协<strong>科技创新后备人才培养计划</strong>。</p>
+                </li>
+                <li>
+                    <p><strong>National Second Prize</strong>, The 9th "Share Cup" Science and Technology Innovation Competition, 2022 (Rank 1).</p>
+                    <p>获2022年第九届共享杯科创竞赛<strong>全国二等奖</strong>（序1）。</p>
+                </li>
+                <li>
+                    <p><strong>Excellent Undergraduate Thesis</strong> of Beijing, 2022.</p>
+                    <p>获2022年北京市<strong>优秀本科毕业设计</strong>。</p>
+                </li>
+                <li>
+                    <p><strong>F5000 - Top Articles</strong> in Outstanding S&T Journals of China, 2025 (Student Rank 1).</p>
+                    <p>获2025中国精品科技期刊<strong>顶尖论文F5000奖</strong>（学生序1）。</p>
+                </li>
+                <li>
+                    <p><strong>Annual Excellent Paper Award</strong>, Journal of Radars, 2024 (Student Rank 1).</p>
+                    <p>获2024年雷达学报<strong>年度优秀论文奖</strong>（学生序1）。</p>
+                </li>
+                <li>
+                    <p>Reviewer for top-tier SCI journals including IEEE IoT, TGRS, TIM, TMTT. Awarded <strong>Excellent Reviewer</strong> for the Journal of Supercomputing. Completed over 40 reviews.</p>
+                    <p>任IEEE IoT、TGRS、TIM、TMTT等SCI顶级期刊审稿人，获计算理论领域SCI高水平期刊Journal of Supercomputing<strong>优秀审稿人</strong>，累计已完成审稿工作40余篇。</p>
+                </li>
+                <li>
+                    <p><strong>Best Report Award</strong>, Doctoral Forum on "Multi-source Information Sensing," Chinese Institute of Electronics, 2024.</p>
+                    <p>获2024年中国电子学会“多源信息感知”博士生论坛<strong>最佳报告奖</strong>。</p>
+                </li>
+                <li>
+                    <p><strong>Best Report Award</strong>, The 5th Doctoral Forum of Journal of Radars, 2025.</p>
+                    <p>获2025年雷达学报博士论坛<strong>最佳报告奖</strong>。</p>
+                </li>
+                <li>
+                    <p><strong>Excellent Report Award</strong>, The 4th Doctoral Forum of Journal of Radars, 2024.</p>
+                    <p>获2024年雷达学报博士论坛<strong>优秀报告奖</strong>。</p>
+                </li>
+                <li>
+                    <p>Selected for the "<strong>Hump Navigation</strong>" Top-Notch Innovative Talent Training Program, Beijing Institute of Technology, 2022.</p>
+                    <p>入选2022年北京理工大学“<strong>驼峰领航</strong>”拔尖创新人才培育计划。</p>
+                </li>
+                <li>
+                    <p><strong>Best Paper Award</strong>, Xu Teli Academic Forum, Beijing Institute of Technology, 2023 (Rank 1).</p>
+                    <p>获2023年北京理工大学徐特立学术论坛<strong>最佳论文奖</strong>（序1）。</p>
+                </li>
+                <li>
+                    <p><strong>National Scholarship</strong> for Doctoral Students, 2025.</p>
+                    <p>获2025年博士研究生<strong>国家奖学金</strong>。</p>
+                </li>
+                <li>
+                    <p>Excellent Student, Beijing Institute of Technology, 2023.</p>
+                    <p>获2023年北京理工大学优秀学生。</p>
+                </li>
+                <li>
+                    <p>Special Doctoral Scholarship, Beijing Institute of Technology, 2023.</p>
+                    <p>获2023年北京理工大学博士生特等奖学金。</p>
+                </li>
+                <li>
+                    <p>Special Doctoral Scholarship, Beijing Institute of Technology, 2022.</p>
+                    <p>获2022年北京理工大学博士生特等奖学金。</p>
+                </li>
+                <li>
+                    <p>Excellent Graduate, Beijing Institute of Technology, 2022.</p>
+                    <p>获2022年北京理工大学优秀毕业生。</p>
+                </li>
+                <li>
+                    <p>Excellent Undergraduate Thesis, Beijing Institute of Technology, 2022.</p>
+                    <p>获2022年北京理工大学优秀本科毕业设计。</p>
+                </li>
+                <li>
+                    <p>Excellent Moral Education Defense Award, Beijing Institute of Technology, 2022.</p>
+                    <p>获2022年北京理工大学优秀德育答辩奖。</p>
+                </li>
+                <li>
+                    <p>Excellent League Member, Beijing Institute of Technology, 2022.</p>
+                    <p>获2022年北京理工大学优秀团员。</p>
+                </li>
+                <li>
+                    <p>First Prize, "Century Cup" Science and Technology Innovation Competition, Beijing Institute of Technology, 2021 (Rank 1).</p>
+                    <p>获2021年北京理工大学“世纪杯”科创竞赛一等奖（序1）。</p>
+                </li>
+                <li>
+                    <p>Xu Teli College Role Model of the Times, Beijing Institute of Technology, 2020.</p>
+                    <p>获2020年北京理工大学徐特立学院时代青春榜样。</p>
+                </li>
+                <li>
+                    <p>Vice Minister and Student Advisor, Radar Club, Beijing Institute of Technology.</p>
+                    <p>任北京理工大学雷达俱乐部副部长、学生顾问。</p>
+                </li>
+                <li>
+                    <p>Peer Mentor for the 2020 Physics Strengthen-Base Class, awarded "Excellent Peer Mentor," Beijing Institute of Technology.</p>
+                    <p>任北京理工大学2020级物理强基班朋辈导师，获优秀朋辈导师称号。</p>
+                </li>
+                <li>
+                    <p>Graduate Mentor for Undergraduate Innovation Program (UIP), leading teams to win honors such as the <strong>Best Paper Award</strong> at the 2024 IEEE ICSIDP, the "<strong>Qiyan</strong>" Program of the Beijing Natural Science Foundation, and "BIT Teli Student Science and Technology Innovation Team."</p>
+                    <p>任大创指导研究生，获2024年IEEE ICSIDP国际会议<strong>最佳论文奖</strong>、获批“北京市自然科学基金<strong>‘启研’计划</strong>”、“北京理工大学特立学生科技创新团队”等荣誉称号。</p>
+                </li>
+            </ul>
         </div>
     </div>
-
-    <!-- Contact Section -->
-    <div class="section section-lightgreen">
+    
+    <!-- 6. Contact Section -->
+    <div id="contact" class="snap-section section-white">
         <div class="container">
-            <h2>Contact</h2>
+            <h2>Contact (联系方式)</h2>
+
+            <h3>Other Homepages (其它主页)</h3>
+            <a href="https://www.zhihu.com/people/sheng-ge-san-jin-15" target="_blank" class="homepage-link">
+                <img src="Zhihu.png" alt="Zhihu Homepage" class="homepage-img">
+                <p class="homepage-caption">Zhihu Homepage (知乎主页)</p>
+            </a>
+
+            <a href="https://ieeexplore.ieee.org/author/37089574449" target="_blank" class="homepage-link">
+                <img src="IEEE.png" alt="IEEE Homepage" class="homepage-img">
+                <p class="homepage-caption">IEEE Homepage (IEEE学者主页)</p>
+            </a>
+
+            <a href="https://www.semanticscholar.org/author/Weicheng-Gao/2051685234" target="_blank" class="homepage-link">
+                <img src="Semantic.png" alt="Semantic Scholar Homepage" class="homepage-img">
+                <p class="homepage-caption">Semantic Scholar Homepage (Semantic学者主页)</p>
+            </a>
+
+            <a href="https://orcid.org/0000-0002-2719-3645" target="_blank" class="homepage-link">
+                <img src="Orcid.png" alt="Orcid Homepage" class="homepage-img">
+                <p class="homepage-caption">Orcid Homepage (Orcid学者主页)</p>
+            </a>
+
+            <a href="https://github.com/JoeyBGOfficial" target="_blank" class="homepage-link">
+                <img src="GitHub.png" alt="GitHub Homepage" class="homepage-img">
+                <p class="homepage-caption">GitHub Homepage (GitHub主页)</p>
+            </a>
+            
+            <h3 style="margin-top: 60px;">Contact Information (联系信息)</h3>
             <p>
-                Address: [Your Address]
+                <strong>Address:</strong> Building 10, Information Science Experimental Building Beijing Institute of Technology 5 Zhongguancun South Street Haidian District, Beijing (北京市海淀区中关村南大街5号北京理工大学10号信息科学实验楼).
             </p>
             <p>
-                Email: <a href="mailto:your-email@example.com">[your-email@example.com]</a>
+                <strong>Email:</strong> <a href="mailto:JoeyBG@126.com">JoeyBG@126.com.</a>
             </p>
             <p>
-                You can also find me on: <a href="#">LinkedIn</a>, <a href="#">Google Scholar</a>, <a href="#">GitHub</a>
+                <strong>Wechat:</strong> JoeyBG_Official.
+            </p>
+            <p>
+                <strong>Tel:</strong> +86-17801204600.
             </p>
         </div>
     </div>
