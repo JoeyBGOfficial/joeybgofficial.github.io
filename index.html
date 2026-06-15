@@ -1,663 +1,2135 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weicheng Gao's Academic Homepage</title>
-    <style>
-        /* --- Scroll Snap Styles --- */
-        html {
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Academic homepage of Weicheng Gao, Beijing Institute of Technology. Research in radar signal processing, through-the-wall radar, and radar-based human activity recognition." name="description"/>
+<title>Weicheng Gao | Academic Homepage</title>
+<style>
+    :root {
+      --bg: #fbfaf7;
+      --bg-2: #f3f0e8;
+      --card: rgba(255, 255, 255, 0.82);
+      --card-solid: #ffffff;
+      --text: #26332f;
+      --muted: #6f7a74;
+      --line: rgba(66, 85, 76, 0.14);
+      --sage: #9ead93;
+      --sage-dark: #708164;
+      --moss: #506a5c;
+      --blue: #8ea5ad;
+      --clay: #c7aa91;
+      --cream: #fff8ed;
+      --shadow: 0 24px 70px rgba(54, 69, 62, 0.12);
+      --shadow-soft: 0 12px 38px rgba(54, 69, 62, 0.10);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --max: 1180px;
+    }
 
-        body {
-            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            color: #333;
-        }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Palatino Linotype", "KaiTi", "楷体", "STKaiti", serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(222, 232, 216, 0.95) 0, rgba(222, 232, 216, 0.00) 31%),
+        radial-gradient(circle at 86% 4%, rgba(204, 219, 223, 0.88) 0, rgba(204, 219, 223, 0.00) 34%),
+        radial-gradient(circle at 72% 80%, rgba(236, 220, 200, 0.72) 0, rgba(236, 220, 200, 0.00) 31%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
 
-        .snap-section {
-            scroll-snap-align: start;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 80px 20px; /* Increased top padding to avoid overlap with header */
-        }
+    ::selection { background: rgba(158, 173, 147, 0.34); }
+    a { color: var(--moss); text-decoration: none; }
+    a:hover { color: var(--sage-dark); }
 
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 50px;
-            box-sizing: border-box;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.34;
+      z-index: -1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
 
-        .header-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-        }
-        header nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 35px;
-        }
-        header nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-            white-space: nowrap;
-        }
-        header nav a:hover {
-            color: #556B2F;
-        }
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--sage), var(--blue), var(--clay));
+      z-index: 2000;
+    }
 
-        .section-white {
-            background-color: #ffffff;
-        }
-        .section-lightgreen {
-            background-color: #f0f5f0;
-        }
-        .hero {
-            background-color: #e8f0e8;
-        }
-        .hero-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            gap: 70px;
-            width: 100%;
-            max-width: 1200px;
-        }
-        .hero-text {
-            text-align: left;
-        }
-        .hero h1 {
-            font-size: 5.5rem;
-            margin: 0;
-            color: #333;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-        .hero-photo {
-            width: 544px;
-            height: 722px;
-            object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            border-radius: 8px;
-        }
-        .hero-photo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-        .hero-buttons {
-            margin-top: 30px;
-        }
-        .btn {
-            background-color: #ffffff;
-            color: #333;
-            padding: 12px 25px;
-            margin-right: 15px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: transparent;
-            color: #ffffff;
-            border-color: #ffffff;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        .container {
-            max-width: 900px;
-            text-align: left;
-            width: 100%;
-        }
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #333;
-            border-bottom: 3px solid #a3b899;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-        h3 {
-            font-size: 1.6rem;
-            color: #556B2F;
-            margin-top: 40px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
+    header {
+      position: sticky;
+      top: 14px;
+      z-index: 1000;
+      padding: 0 18px;
+      margin-top: 14px;
+    }
+    .nav-shell {
+      max-width: var(--max);
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 12px 35px rgba(64, 80, 73, 0.10);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 14px 10px 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+      font-weight: 780;
+      letter-spacing: -0.02em;
+    }
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, var(--sage), var(--blue));
+      box-shadow: 0 0 0 8px rgba(158, 173, 147, 0.18);
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+    nav a {
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 0.92rem;
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: 0.22s ease;
+    }
+    nav a:hover, nav a.active {
+      color: var(--text);
+      background: rgba(158, 173, 147, 0.20);
+      text-decoration: none;
+    }
 
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 70px;
-            width: 100%;
-            max-width: 1200px;
-        }
-        .about-photo {
-            width: 350px;
-            height: auto;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-        .about-text {
-            flex-grow: 1;
-        }
+    main { margin-top: -44px; }
+    section {
+      position: relative;
+      padding: 112px 22px;
+      scroll-margin-top: 96px;
+    }
+    .wrap {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      color: var(--sage-dark);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--sage);
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -0.045em; }
+    h1 {
+      font-size: clamp(3.2rem, 8vw, 7.6rem);
+      max-width: 760px;
+      font-weight: 860;
+    }
+    h2 { font-size: clamp(2.15rem, 4vw, 4.2rem); font-weight: 820; }
+    h3 { font-size: clamp(1.22rem, 2vw, 1.65rem); font-weight: 780; }
+    p { margin: 0 0 14px; }
+    .lead {
+      margin-top: 24px;
+      max-width: 710px;
+      font-size: clamp(1.08rem, 1.6vw, 1.35rem);
+      color: var(--muted);
+    }
+    .cn { color: #596761; }
+    .muted { color: var(--muted); }
 
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
-        a {
-            color: #556B2F;
-            text-decoration: none;
-        }
-        a.btn, header nav a {
-            color: #333;
-        }
-        a.btn:hover, header nav a:hover {
-            text-decoration: none;
-        }
-        a.btn:hover {
-             color: #ffffff;
-        }
-        header nav a:hover {
-            color: #556B2F;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        ul {
-            padding-left: 0;
-            list-style: none;
-        }
-        li {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding-top: 134px;
+      padding-bottom: 74px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.03fr 0.72fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.60);
+      color: var(--moss);
+      font-weight: 720;
+      box-shadow: 0 10px 30px rgba(54, 69, 62, 0.08);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 760;
+      border: 1px solid rgba(80, 106, 92, 0.16);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--text);
+      box-shadow: 0 10px 26px rgba(64, 80, 73, 0.10);
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #dfe9d9, #d8e6eb);
+      border-color: rgba(80, 106, 92, 0.08);
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 34px rgba(64, 80, 73, 0.16);
+      text-decoration: none;
+    }
 
-        #publications li {
-            position: relative;
-            padding-left: 280px; 
-        }
-        #publications li strong {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 270px;
-            text-align: left;
-        }
-        
-        #activities ul, #awards ul {
-            padding-left: 20px;
-            list-style: disc;
-        }
-        #activities li p, #awards li p {
-            margin: 0;
-        }
+    .portrait-stage {
+      position: relative;
+      min-height: 580px;
+    }
+    .portrait-glow {
+      position: absolute;
+      inset: 7% 0 auto auto;
+      width: 88%;
+      aspect-ratio: 1/1;
+      border-radius: 48% 52% 57% 43% / 42% 42% 58% 58%;
+      background: linear-gradient(135deg, rgba(158,173,147,.48), rgba(142,165,173,.34), rgba(199,170,145,.34));
+      filter: blur(1px);
+      transform: rotate(-8deg);
+    }
+    .portrait-card {
+      position: relative;
+      width: min(420px, 100%);
+      margin-left: auto;
+      padding: 16px;
+      border-radius: 38px;
+      background: rgba(255,255,255,.68);
+      border: 1px solid rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+      transform: rotate(1.5deg);
+      transition: transform .35s ease;
+    }
+    .portrait-card:hover { transform: rotate(0deg) translateY(-5px); }
+    .portrait-card img {
+      width: 100%;
+      height: 535px;
+      object-fit: cover;
+      border-radius: 28px;
+      display: block;
+      filter: saturate(.92) contrast(.98);
+    }
+    .floating-note {
+      position: absolute;
+      left: -34px;
+      bottom: 42px;
+      max-width: 240px;
+      padding: 15px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.80);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      color: var(--muted);
+      font-size: .94rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 34px;
+      max-width: 800px;
+    }
+    .stat-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 26px rgba(64, 80, 73, 0.08);
+    }
+    .stat-card strong { display: block; font-size: 1.48rem; line-height: 1.1; }
+    .stat-card span { color: var(--muted); font-size: .88rem; }
+
+    .card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(16px);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .logo-card {
+      padding: 34px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      overflow: hidden;
+      min-height: 420px;
+    }
+    .logo-card img {
+      width: min(280px, 88%);
+      opacity: .92;
+      filter: drop-shadow(0 16px 24px rgba(64,80,73,.12));
+    }
+    .bio-card { padding: 34px; }
+    .timeline { display: grid; gap: 14px; margin-top: 20px; }
+    .timeline-item {
+      position: relative;
+      padding: 18px 18px 18px 58px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 23px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 8px rgba(158,173,147,.16);
+    }
+    .timeline-item b { display: block; margin-bottom: 3px; }
+
+    .research-tags, .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .tag, .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(80,106,92,.16);
+      background: rgba(255,255,255,.58);
+      color: #53635d;
+      font-weight: 700;
+    }
+    .tag { padding: 9px 13px; font-size: .92rem; }
+    .mini-tag { padding: 5px 9px; font-size: .78rem; }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .news-card {
+      padding: 20px;
+      border-radius: 22px;
+      min-height: 168px;
+      background: rgba(255,255,255,.68);
+      border: 1px solid var(--line);
+      transition: .22s ease;
+    }
+    .news-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+    .news-card time {
+      display: inline-block;
+      color: var(--sage-dark);
+      font-weight: 830;
+      margin-bottom: 10px;
+    }
+    .news-card p { color: var(--muted); font-size: .95rem; margin: 8px 0 0; }
+
+    .paper-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .paper-gallery img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 22px;
+      box-shadow: var(--shadow-soft);
+      transition: transform .24s ease, filter .24s ease;
+      filter: saturate(.86) contrast(.98);
+    }
+    .paper-gallery img:hover { transform: translateY(-6px) scale(1.01); filter: saturate(1); }
+
+    .pub-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px;
+      margin: 18px 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.58);
+      box-shadow: 0 10px 28px rgba(64,80,73,.07);
+    }
+    .filter-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter-btn {
+      border: 1px solid rgba(80,106,92,.15);
+      background: rgba(255,255,255,.68);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 760;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      color: var(--text);
+      background: rgba(158, 173, 147, .22);
+    }
+    .search {
+      min-width: min(100%, 310px);
+      flex: 1;
+      max-width: 380px;
+      border: 1px solid rgba(80,106,92,.15);
+      background: rgba(255,255,255,.74);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+    }
+    .search:focus { box-shadow: 0 0 0 4px rgba(158,173,147,.18); }
+
+    .pub-list { display: grid; gap: 12px; }
+    .pub-card {
+      display: grid;
+      grid-template-columns: 118px 1fr;
+      gap: 18px;
+      padding: 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      transition: .22s ease;
+    }
+    .pub-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+    .pub-card.is-hidden { display: none; }
+    .venue {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .venue .idx {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(158,173,147,.32), rgba(142,165,173,.24));
+      font-weight: 850;
+    }
+    .venue .label {
+      color: var(--sage-dark);
+      font-weight: 820;
+      font-size: .86rem;
+      line-height: 1.35;
+    }
+    .pub-title {
+      font-weight: 800;
+      color: #22312d;
+    }
+    .pub-authors { color: var(--muted); margin-top: 4px; }
+    .pub-meta { color: #53635d; margin-top: 4px; }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 11px;
+    }
+    .links a {
+      border: 1px solid rgba(80,106,92,.16);
+      background: rgba(255,255,255,.72);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: .86rem;
+      font-weight: 760;
+    }
+    .links a:hover { background: rgba(158,173,147,.18); text-decoration: none; }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .project-card {
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: .22s ease;
+    }
+    .project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+    .project-card p { color: var(--muted); font-size: .96rem; margin-top: 10px; }
+
+    .activity-img {
+      width: 100%;
+      aspect-ratio: 16 / 8.4;
+      object-fit: cover;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 24px;
+      filter: saturate(.88) contrast(.98);
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .list-card { padding: 26px; }
+    .soft-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+    .soft-list li {
+      position: relative;
+      padding: 16px 16px 16px 42px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid var(--line);
+    }
+    .soft-list li::before {
+      content: "";
+      position: absolute;
+      left: 17px;
+      top: 23px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+    .soft-list p { margin-bottom: 3px; }
+
+    .award-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .award-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+    }
+    .award-card b { color: var(--text); }
+    .award-card p { color: var(--muted); font-size: .95rem; margin: 8px 0 0; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 20px;
+    }
+    .contact-card { padding: 28px; }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .profile-link {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      transition: .22s ease;
+    }
+    .profile-link:hover { transform: translateY(-3px); text-decoration: none; box-shadow: var(--shadow-soft); }
+    .profile-link img {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      object-fit: cover;
+      background: #fff;
+    }
+    .profile-link b { display: block; color: var(--text); }
+    .profile-link span { color: var(--muted); font-size: .9rem; }
+
+    .contact-lines {
+      display: grid;
+      gap: 11px;
+      margin-top: 16px;
+    }
+    .contact-line {
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .contact-line b { color: var(--text); }
+
+    footer {
+      padding: 34px 22px 42px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 980px) {
+      main { margin-top: 0; }
+      .nav-shell { align-items: flex-start; border-radius: 28px; flex-direction: column; }
+      nav { justify-content: flex-start; }
+      .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .portrait-stage { min-height: auto; }
+      .portrait-card { margin: 20px auto 0; }
+      .floating-note { position: relative; left: auto; bottom: auto; margin: 14px auto 0; max-width: 420px; }
+      .stats, .news-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-grid, .award-grid, .two-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 78px 16px; }
+      .paper-gallery, .profile-grid, .stats, .news-grid { grid-template-columns: 1fr; }
+      .pub-card { grid-template-columns: 1fr; }
+      .venue { flex-direction: row; align-items: center; }
+      .portrait-card img { height: 420px; }
+      nav a { font-size: .86rem; padding: 7px 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* Section-specific redesign requested on 2026-06-15 */
+    .small-eyebrow { margin-bottom: 16px; }
+    .mentor-block { margin-top: 30px; }
+    .panel-title-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+    .column-panel { padding: 24px; overflow: hidden; min-height: 0; }
+    .column-panel .pub-list { overflow-y: auto; overscroll-behavior: contain; padding-right: 8px; scrollbar-gutter: stable; }
+    .column-panel .pub-list::-webkit-scrollbar, .award-list-panel::-webkit-scrollbar, .project-side::-webkit-scrollbar, .list-card::-webkit-scrollbar { width: 8px; }
+    .column-panel .pub-list::-webkit-scrollbar-thumb, .award-list-panel::-webkit-scrollbar-thumb, .project-side::-webkit-scrollbar-thumb, .list-card::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(112,129,100,.36); }
+    .column-panel .pub-list::-webkit-scrollbar-track, .award-list-panel::-webkit-scrollbar-track, .project-side::-webkit-scrollbar-track, .list-card::-webkit-scrollbar-track { background: transparent; }
+    .vertical-media-stack { min-height: 0; }
+    .vertical-media-stack img { width: 100%; display: block; border-radius: 24px; box-shadow: var(--shadow-soft); filter: saturate(.88) contrast(.98); border: 1px solid rgba(255,255,255,.72); background: rgba(255,255,255,.58); }
+    .project-stage, .activity-board, .awards-board { display: grid; gap: 18px; min-height: 0; }
+    .video-card { padding: 20px; display: flex; flex-direction: column; gap: 16px; min-height: 0; }
+    .video-frame { border-radius: 26px; overflow: hidden; background: rgba(38, 51, 47, .08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.62); }
+    .video-frame video { width: 100%; aspect-ratio: 16 / 10; display: block; object-fit: cover; background: #111; }
+    .video-caption p { color: var(--muted); }
+    .project-side { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 4px; }
+    .award-media { padding: 18px; display: grid; place-items: center; min-height: 0; overflow: hidden; }
+    .award-media img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; background: #fff; box-shadow: var(--shadow-soft); }
+    .award-list-panel { padding: 18px; overflow-y: auto; min-height: 0; }
+    .contact-hero-card h3 { font-size: clamp(1.35rem, 2vw, 2rem); margin-bottom: 14px; }
+    .profile-grid-polished .profile-link { min-height: 92px; }
+
+    @media (min-width: 981px) {
+      .hero-copy { max-width: 960px; }
+      .hero h1 { max-width: 980px; letter-spacing: -0.058em; }
+      .hero .lead { max-width: 920px; }
+      .portrait-stage { transform: translateX(-1vw); }
+      .portrait-card { width: min(31.5vw, 455px); }
+      .about-grid-clean { grid-template-columns: .58fr 1.42fr; gap: 22px; flex: 1 1 auto; min-height: 0; }
+      .about-grid-clean .logo-card { min-height: 0; }
+      .about-grid-clean .bio-card { display: flex; flex-direction: column; justify-content: center; padding: clamp(22px, 2vw, 34px); }
+      .mentor-block p { line-height: 1.54; margin-bottom: 10px; }
+      #publications .wrap, #activities .wrap, #awards .wrap, #projects .wrap { justify-content: flex-start; }
+      #publications .section-head, #activities .section-head, #awards .section-head, #projects .section-head { margin-bottom: clamp(12px, 2.1svh, 22px); }
+      .pub-board { display: grid; grid-template-columns: minmax(160px, 14vw) minmax(0, 1.17fr) minmax(0, .9fr); gap: 18px; flex: 1 1 auto; min-height: 0; }
+      .pub-board .paper-gallery { display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); gap: 12px; height: 100%; margin: 0; }
+      .pub-board .paper-gallery img { height: 100%; min-height: 0; aspect-ratio: auto; object-fit: cover; border-radius: 18px; }
+      .publication-panel { display: flex; flex-direction: column; padding: clamp(16px, 1.45vw, 24px); border-radius: 28px; }
+      .publication-panel .pub-tools { margin: 0 0 12px; padding: 10px; border-radius: 18px; }
+      .publication-panel .search { min-width: 220px; max-width: 330px; }
+      .publication-panel .pub-list { max-height: none !important; flex: 1 1 auto; gap: 10px; }
+      .publication-panel .pub-card { grid-template-columns: 82px 1fr; padding: 12px; border-radius: 18px; }
+      .publication-panel .pub-title { font-size: .94rem; }
+      .publication-panel .pub-authors, .publication-panel .pub-meta { font-size: .84rem; }
+      .project-stage { grid-template-columns: minmax(0, 1.2fr) minmax(330px, .8fr); flex: 1 1 auto; }
+      .video-card { justify-content: center; border-radius: 30px; }
+      .video-frame { flex: 0 0 auto; }
+      .project-side { display: flex; min-height: 0; }
+      .project-grid-compact { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; align-content: start; }
+      .project-grid-compact .project-card { min-height: 0; height: auto; padding: 15px 16px; border-radius: 18px; }
+      .project-grid-compact .project-card p { margin-top: 6px; line-height: 1.45; }
+      .project-grid-compact .pill-row { margin-top: 8px; }
+      .activity-board { grid-template-columns: minmax(180px, 18vw) minmax(0, 1fr) minmax(0, 1fr); flex: 1 1 auto; }
+      .activity-gallery { display: grid; grid-template-columns: 1fr; height: 100%; }
+      .activity-gallery img { height: 100%; object-fit: cover; }
+      .activity-board .list-card { display: flex; flex-direction: column; padding: 20px; max-height: none; }
+      .activity-board .soft-list { flex: 1 1 auto; overflow-y: auto; padding-right: 8px; }
+      .awards-board { grid-template-columns: minmax(260px, 34vw) minmax(0, 1fr); flex: 1 1 auto; }
+      .award-list-panel .award-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: none; overflow: visible; padding-right: 0; }
+      .award-card { min-height: 0; }
+      .contact-grid-polished { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); flex: 1 1 auto; }
+      .contact-grid-polished .contact-card { display: flex; flex-direction: column; justify-content: center; border-radius: 30px; padding: clamp(22px, 2vw, 34px); }
+      .profile-grid-polished { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .profile-grid-polished .profile-link { border-radius: 22px; padding: 16px; }
+    }
+
+    @media (max-width: 980px) {
+      .pub-board, .activity-board, .project-stage, .awards-board { grid-template-columns: 1fr; }
+      .pub-board .paper-gallery { grid-template-columns: repeat(2, 1fr); }
+      .column-panel .pub-list { max-height: 580px; }
+      .project-side { overflow: visible; }
+      .award-media img { max-height: 820px; }
+    }
 
 
-        .paper-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
-        .paper-img {
-            width: 200px; 
-            height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        .paper-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
 
-        .activity-banner-img {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            margin-bottom: 40px;
-        }
-        .activity-banner-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        #contact .container {
-            text-align: center;
-        }
-        #contact h2 {
-            display: inline-block;
-        }
-        
-        .homepage-link {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            margin-bottom: 20px;
-        }
-        .homepage-img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        .homepage-link:hover .homepage-img {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-        .homepage-caption {
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
+    /* 16:9 full-screen refinement requested on 2026-06-15 */
+    :root {
+      --bg: #f7f5ef;
+      --bg-2: #ecefe7;
+      --card: rgba(255, 255, 255, 0.72);
+      --card-solid: #fffdfa;
+      --text: #23302c;
+      --muted: #66756e;
+      --line: rgba(75, 94, 84, 0.17);
+      --sage: #b7c6ad;
+      --sage-dark: #657a63;
+      --moss: #3f6256;
+      --blue: #aac2c7;
+      --clay: #d2b79f;
+      --cream: #fff9ed;
+      --shadow: 0 28px 85px rgba(47, 67, 59, 0.13);
+      --shadow-soft: 0 15px 44px rgba(47, 67, 59, 0.10);
+      --max: none;
+      --page-x: clamp(24px, 2.6vw, 56px);
+      --page-top: clamp(88px, 10svh, 118px);
+      --page-bottom: clamp(24px, 3.2svh, 44px);
+    }
 
+    * { font-family: "Palatino Linotype", "KaiTi", "楷体", "STKaiti", serif !important; }
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+      scroll-padding-top: 0;
+      background: var(--bg);
+    }
+    body {
+      min-height: 100svh;
+      font-family: "Palatino Linotype", "KaiTi", "楷体", "STKaiti", serif !important;
+      background:
+        radial-gradient(circle at 8% 10%, rgba(214, 227, 205, 0.92) 0, rgba(214, 227, 205, 0.00) 32%),
+        radial-gradient(circle at 90% 12%, rgba(191, 214, 218, 0.82) 0, rgba(191, 214, 218, 0.00) 34%),
+        radial-gradient(circle at 58% 86%, rgba(224, 206, 183, 0.52) 0, rgba(224, 206, 183, 0.00) 34%),
+        linear-gradient(135deg, #f6f4ee 0%, #edf2eb 44%, #eef4f5 100%);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior-y: contain;
+    }
+    button, input, textarea, select { font: inherit !important; }
 
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 20px;
-        }
-    </style>
+    .noise { opacity: 0.23; }
+    .scroll-progress { height: 4px; background: linear-gradient(90deg, #aebf9f, #9fbcc2, #d0b397); }
+
+    header {
+      position: fixed;
+      top: 14px;
+      left: 0;
+      right: 0;
+      z-index: 1500;
+      padding: 0 var(--page-x);
+      margin: 0;
+    }
+    .nav-shell {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      min-height: 58px;
+      padding: 10px 16px 10px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: 0 18px 44px rgba(53, 72, 63, 0.11);
+    }
+    nav a { font-size: clamp(0.86rem, 0.78vw, 1rem); letter-spacing: 0.01em; }
+
+    main { margin-top: 0; }
+    section {
+      height: 100svh;
+      min-height: 100svh;
+      padding: var(--page-top) var(--page-x) var(--page-bottom);
+      scroll-margin-top: 0;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+    }
+    section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg, rgba(255,255,255,0.26), rgba(255,255,255,0.04));
+      z-index: -1;
+    }
+    .wrap {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .section-head {
+      flex: 0 0 auto;
+      margin-bottom: clamp(12px, 2svh, 22px);
+    }
+    h1 { font-size: clamp(4rem, 7vw, 8.9rem); letter-spacing: -0.055em; }
+    h2 { font-size: clamp(2.2rem, 3.65vw, 4.5rem); letter-spacing: -0.038em; }
+    h3 { letter-spacing: -0.025em; }
+    .lead { font-size: clamp(1.1rem, 1.33vw, 1.55rem); line-height: 1.68; }
+
+    .card, .btn, .tag, .mini-tag, .filter-btn, .search, .pub-card, .project-card, .award-card, .contact-line, .profile-link, .timeline-item, .stat-card {
+      border-color: rgba(83, 105, 93, 0.15);
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.76), rgba(255,255,255,0.54));
+      box-shadow: var(--shadow-soft);
+    }
+    .btn.primary { background: linear-gradient(135deg, rgba(218,231,208,.92), rgba(215,232,235,.9)); }
+
+    .hero {
+      height: 100svh;
+      min-height: 100svh;
+      display: flex;
+      align-items: stretch;
+      padding-top: var(--page-top);
+      padding-bottom: var(--page-bottom);
+    }
+    .hero-grid {
+      flex: 1 1 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.24fr) minmax(350px, 0.76fr);
+      gap: clamp(38px, 5vw, 96px);
+      align-items: center;
+      min-height: 0;
+    }
+    .hero-copy { max-width: none; }
+    .hero h1 { max-width: none; }
+    .hero .lead { max-width: min(58vw, 980px); }
+    .hero-actions { margin-top: clamp(18px, 2.7svh, 32px); }
+    .stats { max-width: none; width: min(56vw, 980px); margin-top: clamp(18px, 3svh, 34px); }
+    .portrait-stage { min-height: 0; height: 100%; display: flex; align-items: center; justify-content: center; transform: none; }
+    .portrait-glow { width: min(39vw, 620px); inset: auto; }
+    .portrait-card {
+      width: min(33vw, 520px);
+      margin: 0 auto;
+      border-radius: 40px;
+      padding: clamp(12px, 1vw, 18px);
+    }
+    .portrait-card img { height: min(62svh, 610px); border-radius: 30px; }
+
+    #about .about-grid-clean {
+      flex: 1 1 auto;
+      min-height: 0;
+      grid-template-columns: minmax(280px, 0.48fr) minmax(0, 1.52fr);
+      gap: clamp(18px, 2vw, 32px);
+    }
+    .about-grid-clean .logo-card { min-height: 0; height: 100%; }
+    .about-grid-clean .bio-card {
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding: clamp(22px, 2vw, 36px);
+    }
+    .about-grid-clean .bio-card::-webkit-scrollbar { width: 8px; }
+    .about-grid-clean .bio-card::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(101, 122, 99, .32); }
+    .logo-card img { width: min(310px, 58%); }
+    .timeline { gap: 11px; margin-top: 16px; }
+    .timeline-item { padding-top: 14px; padding-bottom: 14px; }
+    .mentor-block { margin-top: 22px; }
+    .mentor-block p { line-height: 1.55; }
+    .research-tags { gap: 8px; }
+
+    #publications .pub-board {
+      display: grid;
+      grid-template-columns: minmax(150px, 13vw) minmax(0, 1.13fr) minmax(0, 0.87fr);
+      gap: clamp(14px, 1.35vw, 24px);
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    #publications .paper-gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, minmax(0, 1fr));
+      gap: clamp(8px, 1svh, 13px);
+      height: 100%;
+      margin: 0;
+      min-height: 0;
+    }
+    #publications .paper-gallery img {
+      height: 100%;
+      min-height: 0;
+      aspect-ratio: auto;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.72);
+    }
+    .publication-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: clamp(14px, 1.25vw, 22px);
+      border-radius: 30px;
+    }
+    .publication-panel .panel-title-row { margin-bottom: 10px; }
+    .publication-panel h3 { font-size: clamp(1.05rem, 1.15vw, 1.42rem); }
+    .publication-panel .pub-tools { margin: 0 0 10px; padding: 9px; border-radius: 18px; }
+    .publication-panel .filter-group { gap: 6px; }
+    .publication-panel .filter-btn { padding: 6px 10px; font-size: .86rem; }
+    .publication-panel .search { min-width: 190px; max-width: 320px; padding: 8px 12px; }
+    .publication-panel .pub-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: none !important;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      gap: 10px;
+      padding-right: 8px;
+    }
+    .publication-panel .pub-card {
+      grid-template-columns: 74px minmax(0, 1fr);
+      padding: 12px;
+      gap: 12px;
+      border-radius: 18px;
+    }
+    .publication-panel .venue .idx { min-width: 36px; height: 36px; border-radius: 12px; }
+    .publication-panel .venue .label { font-size: .78rem; }
+    .publication-panel .pub-title { font-size: .94rem; line-height: 1.35; }
+    .publication-panel .pub-authors, .publication-panel .pub-meta { font-size: .82rem; line-height: 1.42; }
+    .publication-panel .links { margin-top: 8px; }
+
+    #projects .project-stage {
+      grid-template-columns: minmax(0, 1.36fr) minmax(330px, 0.64fr);
+      gap: clamp(16px, 1.7vw, 28px);
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    .video-card {
+      justify-content: center;
+      align-items: center;
+      padding: clamp(18px, 1.7vw, 30px);
+      border-radius: 34px;
+      overflow: hidden;
+    }
+    .video-frame {
+      width: min(100%, calc(160svh - 560px));
+      max-width: 100%;
+      aspect-ratio: 16 / 10;
+      max-height: calc(100svh - 350px);
+      border-radius: 28px;
+    }
+    .video-frame video { width: 100%; height: 100%; aspect-ratio: 16 / 10; object-fit: contain; }
+    .video-caption { width: min(100%, calc(160svh - 560px)); }
+    .video-caption h3 { margin-bottom: 6px; }
+    .video-caption p { margin-bottom: 6px; line-height: 1.45; }
+    .project-side {
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding-right: 8px;
+    }
+    .project-grid-compact { grid-template-columns: 1fr; gap: 11px; align-content: start; }
+    .project-grid-compact .project-card { min-height: 0; padding: 15px 16px; border-radius: 20px; }
+    .project-grid-compact .project-card h3 { font-size: 1.15rem; }
+    .project-grid-compact .project-card p { margin: 6px 0 0; line-height: 1.42; font-size: .92rem; }
+
+    #activities .activity-board {
+      grid-template-columns: minmax(260px, 22vw) minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(14px, 1.5vw, 24px);
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    #activities .activity-gallery {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      min-height: 0;
+    }
+    #activities .activity-gallery img {
+      width: min(100%, calc(56.25svh - 121px));
+      height: min(100%, calc(100svh - 215px));
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      border-radius: 28px;
+    }
+    #activities .list-card {
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(18px, 1.55vw, 28px);
+      border-radius: 30px;
+    }
+    #activities .soft-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding-right: 8px;
+      gap: 10px;
+    }
+    #activities .soft-list li { padding: 13px 14px 13px 36px; }
+    #activities .soft-list li::before { left: 15px; top: 20px; }
+
+    #awards .awards-board {
+      grid-template-columns: minmax(300px, 38vw) minmax(0, 1fr);
+      gap: clamp(16px, 1.7vw, 28px);
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    .award-media {
+      height: 100%;
+      padding: clamp(16px, 1.5vw, 28px);
+      overflow: hidden;
+      border-radius: 34px;
+    }
+    .award-media img {
+      width: auto;
+      max-width: 100%;
+      height: min(100%, calc(100svh - 220px));
+      aspect-ratio: 4 / 5;
+      object-fit: contain;
+      border-radius: 26px;
+      background: #fff;
+    }
+    .award-list-panel {
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding: clamp(16px, 1.4vw, 24px);
+      border-radius: 34px;
+    }
+    .award-list-panel .award-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .award-card { padding: 16px; border-radius: 20px; }
+    .award-card p { line-height: 1.42; }
+
+    #contact .contact-grid-polished {
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+      gap: clamp(18px, 2vw, 34px);
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    #contact .contact-card {
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding: clamp(24px, 2vw, 38px);
+      border-radius: 34px;
+    }
+    .profile-grid-polished { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .profile-grid-polished .profile-link { min-height: 86px; }
+    .contact-line { line-height: 1.5; }
+    footer { display: none; }
+
+    .column-panel .pub-list::-webkit-scrollbar,
+    .award-list-panel::-webkit-scrollbar,
+    .project-side::-webkit-scrollbar,
+    .list-card::-webkit-scrollbar,
+    #activities .soft-list::-webkit-scrollbar,
+    #contact .contact-card::-webkit-scrollbar,
+    .about-grid-clean .bio-card::-webkit-scrollbar { width: 9px; }
+    .column-panel .pub-list::-webkit-scrollbar-thumb,
+    .award-list-panel::-webkit-scrollbar-thumb,
+    .project-side::-webkit-scrollbar-thumb,
+    .list-card::-webkit-scrollbar-thumb,
+    #activities .soft-list::-webkit-scrollbar-thumb,
+    #contact .contact-card::-webkit-scrollbar-thumb,
+    .about-grid-clean .bio-card::-webkit-scrollbar-thumb {
+      border: 3px solid rgba(255,255,255,0.42);
+      background: rgba(94, 116, 103, .36);
+      border-radius: 999px;
+    }
+    .column-panel .pub-list,
+    .award-list-panel,
+    .project-side,
+    #activities .soft-list,
+    #contact .contact-card,
+    .about-grid-clean .bio-card {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(94,116,103,.42) transparent;
+    }
+
+    @media (max-aspect-ratio: 1/1), (max-width: 980px) {
+      html { scroll-snap-type: none; }
+      header { position: sticky; top: 10px; padding: 0 14px; }
+      main { margin-top: 0; }
+      section {
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
+        padding: 76px 16px 44px;
+        scroll-snap-align: none;
+      }
+      .wrap { height: auto; }
+      .hero-grid, #about .about-grid-clean, #publications .pub-board, #projects .project-stage, #activities .activity-board, #awards .awards-board, #contact .contact-grid-polished {
+        grid-template-columns: 1fr;
+      }
+      .hero .lead, .stats { width: 100%; max-width: none; }
+      .portrait-card { width: min(86vw, 470px); }
+      .portrait-card img { height: min(58svh, 540px); }
+      #publications .paper-gallery { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; height: auto; }
+      #publications .paper-gallery img { height: auto; aspect-ratio: 4 / 5; }
+      .video-frame, .video-caption { width: 100%; max-height: none; }
+      #activities .activity-gallery img { width: min(82vw, 390px); height: auto; }
+      .award-media img { height: auto; width: min(82vw, 520px); }
+      footer { display: block; }
+    }
+
+  
+
+    /* Annotation-based layout refinement: 16:9 desktop polishing */
+    @media (min-width: 981px) and (min-aspect-ratio: 1/1) {
+      :root {
+        --page-x: clamp(24px, 2.45vw, 50px);
+        --page-top: clamp(78px, 8.6svh, 102px);
+        --page-bottom: clamp(18px, 2.3svh, 34px);
+      }
+
+      .section-head { margin-bottom: clamp(10px, 1.45svh, 16px); }
+      .section-head .eyebrow { margin-bottom: 8px; }
+      h2 { font-size: clamp(2rem, 3.35vw, 4.15rem); }
+
+      /* Page 2: make the square BIT logo panel intentional and remove empty feeling. */
+      #about h2 { font-size: clamp(2.05rem, 3.28vw, 4.05rem); }
+      #about .about-grid-clean {
+        grid-template-columns: minmax(250px, 0.34fr) minmax(0, 1.66fr);
+        gap: clamp(16px, 1.65vw, 28px);
+        align-items: stretch;
+      }
+      #about .logo-card {
+        padding: clamp(18px, 2vw, 36px);
+        min-height: 0;
+        height: 100%;
+        align-content: center;
+        justify-items: center;
+        border-radius: 30px;
+      }
+      #about .logo-card img {
+        width: min(74%, 355px);
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+        padding: clamp(14px, 1.45vw, 26px);
+        border-radius: 30px;
+        background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.66));
+        border: 1px solid rgba(83,105,93,.10);
+        box-shadow: 0 20px 54px rgba(54, 69, 62, .12);
+      }
+      #about .bio-card {
+        display: block !important;
+        justify-content: flex-start !important;
+        padding: clamp(20px, 1.9vw, 34px);
+        overflow-y: auto;
+      }
+      #about .timeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(10px, 1vw, 16px);
+        margin-top: 14px;
+      }
+      #about .timeline-item {
+        min-height: 92px;
+        padding: 15px 16px 15px 52px;
+      }
+      #about .timeline-item::before { left: 20px; top: 22px; }
+      #about .mentor-block { margin-top: clamp(14px, 1.8svh, 22px); }
+      #about .mentor-block p {
+        line-height: 1.5;
+        margin-bottom: 8px;
+        font-size: clamp(.94rem, .92vw, 1.05rem);
+      }
+      #about .research-tags { margin-top: 10px; gap: 8px; }
+      #about .tag { padding: 7px 11px; font-size: clamp(.82rem, .78vw, .92rem); }
+
+      /* Page 3: only two 9:16 paper images, with two vertical content panels aligned to them. */
+      #publications h2 { font-size: clamp(2rem, 3.2vw, 4.05rem); }
+      #publications .pub-board {
+        grid-template-columns: minmax(170px, 15vw) minmax(0, 1.12fr) minmax(0, .9fr);
+        gap: clamp(14px, 1.35vw, 24px);
+        align-items: stretch;
+      }
+      #publications .paper-gallery {
+        grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+        gap: clamp(12px, 1.5svh, 18px) !important;
+        height: 100%;
+      }
+      #publications .paper-gallery img {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 9 / 16;
+        object-fit: cover;
+        object-position: top center;
+        border-radius: 22px;
+        background: rgba(255,255,255,.82);
+      }
+      #publications .publication-panel {
+        height: 100%;
+        border-radius: 32px;
+        padding: clamp(14px, 1.25vw, 22px);
+      }
+      #publications .publication-panel .pub-card { background: rgba(255,255,255,.70); }
+
+      /* Page 4: center the 16:10 video and its small title; remove project mini tags. */
+      #projects .project-stage {
+        grid-template-columns: minmax(0, 1.34fr) minmax(320px, 0.66fr);
+        gap: clamp(16px, 1.7vw, 28px);
+        align-items: stretch;
+      }
+      #projects .video-card {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        align-items: center;
+        justify-items: center;
+        gap: clamp(10px, 1.3svh, 18px);
+        padding: clamp(18px, 1.6vw, 30px);
+      }
+      #projects .video-frame {
+        width: min(100%, calc((100svh - 245px) * 1.6));
+        max-height: calc(100svh - 245px);
+        margin-inline: auto;
+        border-radius: 30px;
+      }
+      #projects .video-caption {
+        width: 100%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #projects .video-caption h3 {
+        margin: 0;
+        font-size: clamp(1.35rem, 1.55vw, 2.1rem);
+      }
+      #projects .video-caption p,
+      #projects .project-card .pill-row { display: none !important; }
+      #projects .project-grid-compact { gap: clamp(10px, 1.1svh, 15px); }
+      #projects .project-grid-compact .project-card {
+        padding: clamp(16px, 1.25vw, 22px);
+        min-height: clamp(82px, 10.8svh, 122px);
+        justify-content: center;
+      }
+      #projects .project-grid-compact .project-card h3 { font-size: clamp(1.05rem, 1.05vw, 1.3rem); }
+      #projects .project-grid-compact .project-card p { font-size: clamp(.86rem, .85vw, .98rem); line-height: 1.42; }
+
+      /* Page 5: align the 9:16 activity image and the two text panels to the same height. */
+      #activities .activity-board {
+        grid-template-columns: minmax(250px, 22vw) minmax(0, 1fr) minmax(0, 1fr);
+        gap: clamp(16px, 1.5vw, 26px);
+        align-items: stretch;
+      }
+      #activities .activity-gallery {
+        height: 100%;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        margin: 0;
+      }
+      #activities .activity-gallery img {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: none !important;
+        aspect-ratio: 9 / 16;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 30px;
+      }
+      #activities .list-card {
+        height: 100%;
+        padding: clamp(18px, 1.55vw, 28px);
+        border-radius: 30px;
+      }
+      #activities .list-card h3 {
+        min-height: clamp(42px, 5svh, 58px);
+        display: flex;
+        align-items: center;
+        margin: 0;
+      }
+      #activities .soft-list { margin-top: 10px; gap: 10px; }
+      #activities .soft-list li { padding: 13px 14px 13px 36px; }
+
+      /* Page 6: keep the 4:5 award image fully visible and visually centered. */
+      #awards .awards-board {
+        grid-template-columns: minmax(330px, 41vw) minmax(0, 1fr);
+        gap: clamp(18px, 1.8vw, 30px);
+        align-items: stretch;
+      }
+      #awards .award-media {
+        height: 100%;
+        padding: clamp(10px, 1vw, 18px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      #awards .award-media img {
+        width: auto;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: auto;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 24px;
+      }
+      #awards .award-list-panel { height: 100%; padding: clamp(15px, 1.25vw, 22px); }
+      #awards .award-list-panel .award-grid { gap: 12px; }
+
+      /* Page 7: enlarge homepage links to fill the right contact panel. */
+      #contact .contact-grid-polished {
+        grid-template-columns: minmax(0, .90fr) minmax(0, 1.10fr);
+        gap: clamp(20px, 2vw, 36px);
+      }
+      #contact .contact-grid-polished > .contact-card:last-child {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: flex-start !important;
+      }
+      #contact .contact-grid-polished > .contact-card:last-child h3 {
+        flex: 0 0 auto;
+        margin-bottom: clamp(12px, 1.8svh, 20px);
+      }
+      #contact .profile-grid-polished {
+        flex: 1 1 auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: clamp(14px, 1.45vw, 24px);
+        margin-top: 0 !important;
+      }
+      #contact .profile-grid-polished .profile-link {
+        height: 100%;
+        min-height: 0;
+        grid-template-columns: clamp(64px, 4.6vw, 86px) 1fr;
+        gap: clamp(14px, 1.1vw, 20px);
+        padding: clamp(16px, 1.25vw, 24px);
+        border-radius: 26px;
+      }
+      #contact .profile-grid-polished .profile-link img {
+        width: clamp(64px, 4.6vw, 86px);
+        height: clamp(64px, 4.6vw, 86px);
+        border-radius: 20px;
+      }
+      #contact .profile-grid-polished .profile-link b { font-size: clamp(1rem, 1vw, 1.2rem); }
+      #contact .profile-grid-polished .profile-link span span { font-size: clamp(.86rem, .86vw, 1rem); }
+    }
+
+  
+
+    /* Final annotation polish: About square logo, clean video/award/contact layouts */
+    @media (min-width: 981px) and (min-aspect-ratio: 1/1) {
+      /* Page 2: square BIT image frame, larger logo, no inner white frame. */
+      #about .about-grid-clean {
+        grid-template-columns: minmax(240px, 18vw) minmax(0, 1fr) !important;
+        gap: clamp(18px, 1.7vw, 30px) !important;
+        align-items: start !important;
+      }
+      #about .logo-card {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 1 / 1 !important;
+        align-self: start !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: clamp(10px, 1.05vw, 18px) !important;
+        border-radius: 32px !important;
+        overflow: visible !important;
+      }
+      #about .logo-card img {
+        width: 94% !important;
+        height: 94% !important;
+        max-width: none !important;
+        aspect-ratio: 1 / 1 !important;
+        object-fit: contain !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        outline: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        filter: drop-shadow(0 22px 42px rgba(42, 63, 54, .18)) !important;
+        mix-blend-mode: multiply;
+      }
+      #about .bio-card {
+        height: 100% !important;
+        padding: clamp(20px, 1.7vw, 30px) !important;
+      }
+      #about .timeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: clamp(10px, .95vw, 16px) !important;
+      }
+
+      /* Page 4: more orderly RadHARAGT panel, centered 16:10 video and title. */
+      #projects .project-stage {
+        grid-template-columns: minmax(0, 1.28fr) minmax(300px, .58fr) !important;
+        gap: clamp(18px, 1.8vw, 32px) !important;
+        align-items: stretch !important;
+      }
+      #projects .video-card {
+        display: grid !important;
+        grid-template-rows: minmax(0, 1fr) auto !important;
+        align-items: center !important;
+        justify-items: center !important;
+        padding: clamp(14px, 1.35vw, 24px) !important;
+        gap: clamp(8px, 1svh, 14px) !important;
+        border-radius: 34px !important;
+      }
+      #projects .video-frame {
+        width: min(100%, calc((100svh - 220px) * 1.6)) !important;
+        max-width: 100% !important;
+        max-height: calc(100svh - 220px) !important;
+        aspect-ratio: 16 / 10 !important;
+        margin: auto !important;
+        border-radius: 26px !important;
+        box-shadow: 0 18px 48px rgba(32, 44, 39, .16) !important;
+        background: rgba(255,255,255,.55) !important;
+      }
+      #projects .video-frame video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        border-radius: 26px !important;
+      }
+      #projects .video-caption {
+        width: auto !important;
+        max-width: 100% !important;
+        padding: 4px 18px 0 !important;
+        text-align: center !important;
+        justify-content: center !important;
+      }
+      #projects .video-caption h3 {
+        font-size: clamp(1.35rem, 1.55vw, 2.05rem) !important;
+        line-height: 1.1 !important;
+        margin: 0 !important;
+      }
+      #projects .project-side {
+        padding-right: 10px !important;
+      }
+      #projects .project-grid-compact {
+        gap: clamp(11px, 1.15svh, 16px) !important;
+      }
+      #projects .project-grid-compact .project-card {
+        min-height: clamp(86px, 11svh, 122px) !important;
+        padding: clamp(16px, 1.25vw, 22px) !important;
+        border-radius: 22px !important;
+      }
+
+      /* Page 6: narrow award image card and make margins consistent. */
+      #awards .awards-board {
+        grid-template-columns: minmax(280px, 35vw) minmax(0, 1fr) !important;
+        gap: clamp(18px, 1.75vw, 30px) !important;
+        align-items: stretch !important;
+      }
+      #awards .award-media {
+        padding: clamp(18px, 1.55vw, 28px) !important;
+        border-radius: 34px !important;
+        overflow: hidden !important;
+      }
+      #awards .award-media img {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        object-position: center !important;
+        border-radius: 24px !important;
+        box-shadow: 0 18px 46px rgba(42, 57, 51, .13) !important;
+      }
+      #awards .award-list-panel {
+        padding: clamp(16px, 1.35vw, 24px) !important;
+      }
+
+      /* Page 7: remove homepage item and let five links fill the right card. */
+      #contact .profile-grid-polished {
+        flex: 1 1 auto !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(16px, 1.55vw, 26px) !important;
+        margin-top: clamp(12px, 1.4svh, 20px) !important;
+      }
+      #contact .profile-grid-polished .profile-link {
+        min-height: 0 !important;
+        height: 100% !important;
+        border-radius: 28px !important;
+        padding: clamp(18px, 1.35vw, 26px) !important;
+        grid-template-columns: clamp(70px, 4.9vw, 94px) 1fr !important;
+      }
+      #contact .profile-grid-polished .profile-link:last-child {
+        grid-column: 1 / -1 !important;
+      }
+      #contact .profile-grid-polished .profile-link img {
+        width: clamp(70px, 4.9vw, 94px) !important;
+        height: clamp(70px, 4.9vw, 94px) !important;
+        border-radius: 22px !important;
+      }
+    }
+
+    @media (max-width: 980px) {
+      #about .logo-card { aspect-ratio: 1 / 1; min-height: 0; }
+      #about .logo-card img { width: 86%; max-width: 320px; padding: 0; background: transparent; box-shadow: none; filter: drop-shadow(0 18px 36px rgba(42, 63, 54, .18)); mix-blend-mode: multiply; }
+      #contact .profile-grid-polished .profile-link:last-child { grid-column: auto; }
+    }
+
+  
+
+    /* User annotation update: YXP photo, fuller mentor text, clean video frame */
+    @media (min-width: 981px) and (min-aspect-ratio: 1/1) {
+      #about .about-grid-clean {
+        grid-template-columns: minmax(245px, 18.6vw) minmax(0, 1fr) !important;
+        gap: clamp(18px, 1.7vw, 30px) !important;
+        align-items: stretch !important;
+      }
+      #about .about-media-stack {
+        height: 100% !important;
+        min-height: 0 !important;
+        display: grid !important;
+        grid-template-rows: auto minmax(0, 1fr) !important;
+        gap: clamp(14px, 1.45vw, 24px) !important;
+      }
+      #about .bit-logo-card {
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: clamp(12px, 1.05vw, 18px) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 32px !important;
+        overflow: hidden !important;
+      }
+      #about .bit-logo-card img {
+        width: 92% !important;
+        height: 92% !important;
+        object-fit: contain !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        filter: drop-shadow(0 22px 46px rgba(43, 65, 56, .20)) !important;
+        mix-blend-mode: multiply;
+      }
+      #about .mentor-photo-card {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: clamp(12px, 1.05vw, 18px) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 32px !important;
+        overflow: hidden !important;
+      }
+      #about .mentor-photo-card img {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: 3 / 4 !important;
+        object-fit: cover !important;
+        object-position: center top !important;
+        border-radius: 24px !important;
+        filter: saturate(.96) contrast(.98) drop-shadow(0 22px 46px rgba(43, 65, 56, .18)) !important;
+      }
+      #about .bio-card {
+        height: 100% !important;
+        padding: clamp(18px, 1.45vw, 26px) !important;
+        overflow-y: auto !important;
+      }
+      #about .bio-card h3 {
+        font-size: clamp(1.18rem, 1.25vw, 1.58rem) !important;
+      }
+      #about .timeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: clamp(10px, .9vw, 15px) !important;
+        margin-top: 10px !important;
+      }
+      #about .timeline-item {
+        min-height: 82px !important;
+        padding: 13px 15px 13px 48px !important;
+      }
+      #about .mentor-block {
+        margin-top: clamp(12px, 1.5svh, 18px) !important;
+      }
+      #about .mentor-block > p {
+        font-size: clamp(.88rem, .80vw, .98rem) !important;
+        line-height: 1.42 !important;
+        margin-bottom: 6px !important;
+      }
+      #about .mentor-detail-grid {
+        margin-top: clamp(10px, 1.2svh, 14px) !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(9px, .8vw, 13px) !important;
+      }
+      #about .mentor-detail-card {
+        padding: clamp(11px, .95vw, 16px) !important;
+        border-radius: 18px !important;
+        border: 1px solid rgba(83,105,93,.14) !important;
+        background: rgba(255,255,255,.58) !important;
+        box-shadow: 0 8px 24px rgba(47, 67, 59, .055) !important;
+      }
+      #about .mentor-detail-card b {
+        display: block !important;
+        margin-bottom: 5px !important;
+        color: var(--text) !important;
+        font-size: clamp(.90rem, .82vw, 1.02rem) !important;
+      }
+      #about .mentor-detail-card p {
+        margin: 0 0 4px !important;
+        line-height: 1.32 !important;
+        font-size: clamp(.78rem, .72vw, .88rem) !important;
+        color: var(--muted) !important;
+      }
+      #about .mentor-detail-card p.cn {
+        color: #52645c !important;
+      }
+      #about .research-tags {
+        margin-top: clamp(10px, 1.2svh, 14px) !important;
+        gap: 7px !important;
+      }
+      #about .tag {
+        padding: 6px 10px !important;
+        font-size: clamp(.76rem, .7vw, .86rem) !important;
+      }
+
+      #projects .project-stage {
+        grid-template-columns: minmax(0, 1.34fr) minmax(310px, .58fr) !important;
+        gap: clamp(18px, 1.7vw, 30px) !important;
+        align-items: stretch !important;
+      }
+      #projects .video-card {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: clamp(18px, 1.55vw, 28px) !important;
+        border-radius: 34px !important;
+        overflow: hidden !important;
+      }
+      #projects .video-frame {
+        width: min(100%, calc((100svh - 198px) * 1.6)) !important;
+        max-width: 100% !important;
+        max-height: calc(100svh - 198px) !important;
+        aspect-ratio: 16 / 10 !important;
+        margin: 0 auto !important;
+        border-radius: 28px !important;
+        background: rgba(255,255,255,.48) !important;
+        box-shadow: 0 18px 52px rgba(32,44,39,.16) !important;
+      }
+      #projects .video-frame video {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: 16 / 10 !important;
+        object-fit: contain !important;
+        border-radius: 28px !important;
+        display: block !important;
+      }
+      #projects .video-caption {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 980px), (max-aspect-ratio: 1/1) {
+      #about .about-media-stack {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      #about .bit-logo-card { aspect-ratio: 1 / 1; }
+      #about .mentor-photo-card { aspect-ratio: 3 / 4; }
+      #about .bit-logo-card img,
+      #about .mentor-photo-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      #about .mentor-photo-card img { object-fit: cover; border-radius: 22px; }
+      #projects .video-caption { display: none !important; }
+    }
+</style>
 </head>
 <body>
+<div aria-hidden="true" class="noise"></div>
+<div aria-hidden="true" class="scroll-progress" id="scrollProgress"></div>
+<header>
+<div class="nav-shell">
+<a aria-label="Back to home" class="brand" href="#home"><span class="brand-dot"></span><span>Weicheng Gao</span></a>
+<nav aria-label="Primary navigation">
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#publications">Publications</a>
+<a href="#projects">Projects</a>
+<a href="#activities">Activities</a>
+<a href="#awards">Awards</a>
+<a href="#contact">Contact</a>
+</nav>
+</div>
+</header>
+<main>
+<section class="hero" id="home">
+<div class="wrap hero-grid">
+<div class="reveal hero-copy">
+<div class="hero-kicker">Ph.D. Student · Beijing Institute of Technology</div>
+<h1>Weicheng Gao</h1>
+<p class="lead">Weicheng Gao is a Ph.D. student at the School of Information and Electronics / Radar Research Institute, Beijing Institute of Technology. His research interests include mathematical theory for signal processing and through-the-wall radar human activity recognition.</p>
+<p class="lead cn">高炜程，北京理工大学信息与电子学院 / 雷达技术研究院博士生，主要研究方向为信号处理数学理论、穿墙雷达人体行为识别。</p>
+<div class="hero-actions">
+<a class="btn primary" href="#publications">View Publications</a>
+<a class="btn" href="https://github.com/JoeyBGOfficial" rel="noopener" target="_blank">GitHub</a>
+<a class="btn" href="https://radar.bit.edu.cn/szdw/jsfc/gyjsjs/tzld1/bb18d2ab2b5745cfa4189518b91213f4.htm" rel="noopener" target="_blank">Mentor</a>
+</div>
+<div aria-label="Profile highlights" class="stats">
+<div class="stat-card"><strong>BIT</strong><span>Radar Research Institute</span></div>
+<div class="stat-card"><strong>20+</strong><span>listed papers &amp; outputs</span></div>
+<div class="stat-card"><strong>13</strong><span>GitHub repositories</span></div>
+<div class="stat-card"><strong>2026</strong><span>latest update</span></div>
+</div>
+</div>
+<div class="portrait-stage reveal">
+<div class="portrait-glow"></div>
+<div class="portrait-card">
+<img alt="Portrait of Weicheng Gao" src="GWC.jpg"/>
+</div>
+</div>
+</div>
+</section>
+<section id="about">
+<div class="wrap">
+<div class="section-head reveal">
+<div>
+<span class="eyebrow">About Me</span>
+<h2>Research with physics, signal processing, and radar systems.</h2>
+</div>
+</div>
+<div class="about-grid about-grid-clean">
+<div class="about-media-stack reveal"><div class="card logo-card bit-logo-card"><img alt="Beijing Institute of Technology logo" src="BIT.png"/></div><div class="card mentor-photo-card"><img alt="Portrait of Prof. Xiaopeng Yang" src="YXP.png"/></div></div>
+<div class="card bio-card reveal">
+<h3>Education Experience · 教育经历</h3>
+<div class="timeline">
+<div class="timeline-item">
+<b>2018.09–2022.06 · Beijing Institute of Technology</b>
+<span>B.S., Xu Teli Class of Excellence / 徐特立英才班，本科</span>
+</div>
+<div class="timeline-item">
+<b>2022.09–Present · Beijing Institute of Technology</b>
+<span>Ph.D. Student, School of Information and Electronics, Radar Research Institute / 信息与电子学院，雷达技术研究院，博士</span>
+</div>
+</div>
+<div class="mentor-block"><h3>Mentor Profile · 导师简介</h3><p>Xiaopeng Yang is a professor and doctoral supervisor at Beijing Institute of Technology, a Fellow of the Chinese Institute of Electronics, an IEEE Senior Member, and an IET Fellow. He leads the Ministry of Education Innovation Team for “New-Concept Radar and Real-Time Information Processing” and works on radar intelligent signal processing, deep-learning-based target recognition, and penetrating radar systems.</p><p class="cn">杨小鹏：北京理工大学教授、博士生导师、中国电子学会会士、IEEE高级会员、IET高级会士，北京理工大学教育部“新体制雷达与实时信息处理”创新团队带头人。主要研究方向包括雷达智能信号处理、深度学习智能目标识别、穿透雷达系统等。</p><div class="mentor-detail-grid"><div class="mentor-detail-card"><b>Academic Positions · 学术任职</b><p>Secretary of the Radar Technology Institute; deputy director of a national discipline innovation and talent-introduction base; director of the Intelligent Connected Vehicle and Smart Transportation Center at BIT Yangtze Delta Region Academy.</p><p class="cn">任雷达技术研究所书记、国家级学科创新引智基地副主任、北理工长三角研究院智能网联与智慧交通中心主任。</p></div><div class="mentor-detail-card"><b>Research &amp; Projects · 科研方向</b><p>Long-term research in radar signal processing and radar systems; recent work covers radar clutter suppression, new-concept radar, penetrating radar, and AI-enabled radar perception.</p><p class="cn">长期从事雷达信号处理与雷达系统研究，近年研究涵盖雷达杂波抑制、新体制雷达、穿透雷达与智能雷达感知。</p></div><div class="mentor-detail-card"><b>Outputs · 科研成果</b><p>More than 20 major projects in recent years, 150+ SCI/EI papers, 15 authorized invention patents, and 10 additional patent applications.</p><p class="cn">近五年承担国家863计划、自然科学基金等项目20余项，发表SCI/EI论文150余篇，授权国家发明专利15项、受理10项。</p></div><div class="mentor-detail-card"><b>Professional Service · 学术服务</b><p>Service on IEEE radar and aerospace-electronic-systems committees; guest editing for IEEE signal-processing topics; chairing or organizing IET Radar, IEEE ICSIDP, and related conferences.</p><p class="cn">担任IEEE雷达系统、AESS相关委员会成员，IEEE信号处理特刊客座编辑，并担任IET Radar、IEEE ICSIDP等国际会议主席或程序委员会主席。</p></div><div class="mentor-detail-card"><b>Honors · 荣誉奖励</b><p>Associated with national technical invention awards and society-level honors for radar-system and signal-processing contributions.</p><p class="cn">曾获国家技术发明奖一等奖、二等奖、三等奖等奖项，并获中国电子学会优秀科技工作者、雷达分会优秀委员等荣誉。</p></div><div class="mentor-detail-card"><b>Student Mentoring · 学生培养</b><p>Students have received national scholarships, excellent theses, excellent graduate honors, IET student awards, and best-paper awards at IEEE/IET conferences.</p><p class="cn">指导学生获国家奖学金、优秀论文/毕业设计、优秀毕业生、IET优秀学生奖，以及IEEE/IET等国际会议优秀论文奖。</p></div></div><div class="research-tags"><span class="tag">Radar Intelligent Signal Processing</span><span class="tag">AI Target Recognition</span><span class="tag">Penetrating Radar Systems</span><span class="tag">New-Concept Radar</span><span class="tag">Radar System Design</span><span class="tag">Student Mentoring</span></div></div>
+</div>
+</div>
+</div>
+</section>
+<section id="publications">
+<div class="wrap">
+<div class="section-head reveal">
+<div>
+<span class="eyebrow">Publications</span>
+<h2>Selected published papers and research explorations.</h2>
+</div>
+</div>
+<div class="pub-board">
+<aside aria-label="Paper cover gallery" class="vertical-media-stack paper-gallery reveal">
+<img alt="Cover of paper 1" src="Paper1.png"/>
+<img alt="Cover of paper 2" src="Paper2.png"/>
+</aside>
+<div class="card column-panel publication-panel reveal">
+<div class="panel-title-row">
+<h3>Published / Accepted Papers · 发表/录用论文</h3>
+</div>
+<div class="pub-tools">
+<div aria-label="Publication filters" class="filter-group">
+<button class="filter-btn active" data-filter="all" type="button">All</button>
+<button class="filter-btn" data-filter="journal" type="button">Journal</button>
+<button class="filter-btn" data-filter="conference" type="button">Conference</button>
+<button class="filter-btn" data-filter="preprint" type="button">Preprint</button>
+<button class="filter-btn" data-filter="chinese" type="button">Chinese</button>
+</div>
+<input aria-label="Search publications" class="search" id="pubSearch" placeholder="Search title, venue, year..." type="search"/>
+</div>
+<div class="pub-list reveal" id="pubList">
+<article class="pub-card" data-search="TWR-MCAE IEEE TGRS 2022 Through-the-Wall Radar Human Motion Recognition" data-type="journal">
+<div class="venue"><span class="idx">1</span><span class="label">IEEE TGRS · SCI Q1</span></div>
+<div><div class="pub-title">TWR-MCAE: A Data Augmentation Method for Through-the-Wall Radar Human Motion Recognition</div><div class="pub-authors">W. Gao, X. Yang, X. Qu, and T. Lan</div><div class="pub-meta"><i>IEEE Transactions on Geoscience and Remote Sensing</i>, vol. 60, Art. no. 5118617, pp. 1–17, 2022.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/9915621" rel="noopener" target="_blank">Link</a><a href="https://arxiv.org/abs/2301.02488" rel="noopener" target="_blank">arXiv</a><a href="https://zhuanlan.zhihu.com/p/649340843" rel="noopener" target="_blank">Zhihu</a></div></div>
+</article>
+<article class="pub-card" data-search="Indoor Human Behavior Recognition Wavelet Scattering Network Conditional Random Field IEEE TGRS 2023" data-type="journal">
+<div class="venue"><span class="idx">2</span><span class="label">IEEE TGRS · SCI Q1</span></div>
+<div><div class="pub-title">Indoor Human Behavior Recognition Method Based on Wavelet Scattering Network and Conditional Random Field Model</div><div class="pub-authors">X. Qu, W. Gao, H. Meng, Y. Zhao, and X. Yang</div><div class="pub-meta"><i>IEEE Transactions on Geoscience and Remote Sensing</i>, vol. 61, pp. 1–15, 2023.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10124443" rel="noopener" target="_blank">Link</a><a href="https://zhuanlan.zhihu.com/p/649340843" rel="noopener" target="_blank">Zhihu</a></div></div>
+</article>
+<article class="pub-card" data-search="Lightweight Multiscale Neural Network Macro Micro-Doppler IEEE IoT Journal 2023" data-type="journal">
+<div class="venue"><span class="idx">3</span><span class="label">IEEE IoTJ · SCI Q1</span></div>
+<div><div class="pub-title">A Lightweight Multiscale Neural Network for Indoor Human Activity Recognition Based on Macro and Micro-Doppler Features</div><div class="pub-authors">X. Yang, W. Gao, X. Qu, P. Yin, H. Meng, and A. E. Fathy</div><div class="pub-meta"><i>IEEE Internet of Things Journal</i>, vol. 10, no. 24, pp. 21836–21854, 2023.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10206026" rel="noopener" target="_blank">Link</a><a href="https://zhuanlan.zhihu.com/p/649340843" rel="noopener" target="_blank">Zhihu</a></div></div>
+</article>
+<article class="pub-card" data-search="Boulic Sinusoidal Pendulum Model TMTT 2025 Micro-Doppler Signature Representation" data-type="journal">
+<div class="venue"><span class="idx">4</span><span class="label">IEEE TMTT · SCI Q1</span></div>
+<div><div class="pub-title">Through-the-Wall Radar Human Activity Micro-Doppler Signature Representation Method Based on Joint Boulic-Sinusoidal Pendulum Model</div><div class="pub-authors">X. Yang, W. Gao, X. Qu, Z. Ma, and H. Zhang</div><div class="pub-meta"><i>IEEE Transactions on Microwave Theory and Techniques</i>, vol. 73, no. 2, pp. 1248–1263, 2025.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10644143" rel="noopener" target="_blank">Link</a><a href="https://arxiv.org/abs/2408.12077" rel="noopener" target="_blank">arXiv</a><a href="https://zhuanlan.zhihu.com/p/711643123" rel="noopener" target="_blank">Zhihu</a></div></div>
+</article>
+<article class="pub-card" data-search="Generalizable Indoor Human Activity Recognition Micro-Doppler Corner Point Cloud Dynamic Graph Learning TAES 2025" data-type="journal">
+<div class="venue"><span class="idx">5</span><span class="label">IEEE TAES · SCI Q1</span></div>
+<div><div class="pub-title">Generalizable Indoor Human Activity Recognition Method Based on Micro-Doppler Corner Point Cloud and Dynamic Graph Learning</div><div class="pub-authors">X. Yang, W. Gao, X. Qu, and H. Meng</div><div class="pub-meta"><i>IEEE Transactions on Aerospace and Electronic Systems</i>, vol. 61, no. 2, pp. 5195–5209, 2025.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10799206" rel="noopener" target="_blank">Link</a><a href="https://arxiv.org/abs/2410.07542" rel="noopener" target="_blank">arXiv</a><a href="https://zhuanlan.zhihu.com/p/711643123" rel="noopener" target="_blank">Zhihu</a></div></div>
+</article>
+<article class="pub-card" data-search="Adaptive Micro-Doppler Corner Feature Difference of Gaussian Deformable Convolution SPL 2024" data-type="journal">
+<div class="venue"><span class="idx">6</span><span class="label">IEEE SPL · SCI Q2</span></div>
+<div><div class="pub-title">Adaptive Micro-Doppler Corner Feature Extraction Method Based on Difference of Gaussian Filter and Deformable Convolution</div><div class="pub-authors">W. Gao, X. Qu, H. Meng, X. Sun, and X. Yang</div><div class="pub-meta"><i>IEEE Signal Processing Letters</i>, vol. 31, pp. 860–864, 2024.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10473202" rel="noopener" target="_blank">Link</a><a href="https://zhuanlan.zhihu.com/p/711643123" rel="noopener" target="_blank">Zhihu</a></div></div>
+</article>
+<article class="pub-card" data-search="MIMO Through-the-Wall Radar Micro-Doppler Signature Augmentation Multi-Channel Information Fusion SPL 2026" data-type="journal">
+<div class="venue"><span class="idx">7</span><span class="label">IEEE SPL · SCI Q2</span></div>
+<div><div class="pub-title">MIMO Through-the-Wall Radar Micro-Doppler Signature Augmentation Method Based on Multi-Channel Information Fusion</div><div class="pub-authors">W. Gao, S. Liu, J. Wang, X. Qu, and X. Yang</div><div class="pub-meta"><i>IEEE Signal Processing Letters</i>, vol. 33, pp. 579–583, 2026.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/11345966" rel="noopener" target="_blank">Link</a><a href="https://github.com/JoeyBGOfficial/MIMO-Through-the-Wall-Radar-Micro-Doppler-Signature-Augmentation" rel="noopener" target="_blank">GitHub</a></div></div>
+</article>
+<article class="pub-card" data-search="MIMO Through-the-Wall Radar Micro-Doppler Signature Representation Limited Data Heterogeneous Transfer Learning SPL 2026" data-type="journal">
+<div class="venue"><span class="idx">8</span><span class="label">IEEE SPL · SCI Q2</span></div>
+<div><div class="pub-title">MIMO Through-the-Wall Radar Micro-Doppler Signature Representation Under Limited Data Using Heterogeneous Transfer Learning</div><div class="pub-authors">W. Gao, K. Dong, J. Feng, Y. Xu, X. Qu, and X. Yang</div><div class="pub-meta"><i>IEEE Signal Processing Letters</i>, vol. 33, pp. 1541–1545, 2026.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/11456564" rel="noopener" target="_blank">Link</a><a href="https://github.com/JoeyBGOfficial/Heterogeneous-Transfer-Learning-Based-MIMO-Through-the-Wall-Radar-Micro-Doppler-Representation" rel="noopener" target="_blank">GitHub</a></div></div>
+</article>
+<article class="pub-card" data-search="Indoor Human Motion Recognition Kernel-Distance Doppler Velocity APSIPA 2022" data-type="conference">
+<div class="venue"><span class="idx">9</span><span class="label">APSIPA ASC · EI</span></div>
+<div><div class="pub-title">Indoor Human Motion Recognition Method Based on Kernel-Distance Doppler Velocity Estimation and Lightweight Network</div><div class="pub-authors">W. Gao, X. Yang, X. Qu, J. Liao, Z. Yin, and D. Zhang</div><div class="pub-meta"><i>APSIPA ASC</i>, Chiang Mai, Thailand, pp. 2058–2064, 2022.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/9980106" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Triple-Link Fusion Decision Through-the-Wall Radar Human Motion Recognition MAPE 2022" data-type="conference">
+<div class="venue"><span class="idx">10</span><span class="label">IEEE MAPE · EI</span></div>
+<div><div class="pub-title">Triple-Link Fusion Decision Method for Through-the-Wall Radar Human Motion Recognition</div><div class="pub-authors">W. Gao, X. Yang, T. Lan, X. Qu, and J. Gong</div><div class="pub-meta"><i>IEEE MAPE</i>, Chengdu, China, pp. 408–414, 2022.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/9935178" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Generalization Ability Analysis Through-the-Wall Radar Human Activity Recognition ICSIDP 2024" data-type="conference">
+<div class="venue"><span class="idx">11</span><span class="label">IEEE ICSIDP · EI</span></div>
+<div><div class="pub-title">Generalization Ability Analysis of Through-the-Wall Radar Human Activity Recognition</div><div class="pub-authors">W. Gao, X. Qu, and X. Yang</div><div class="pub-meta"><i>IEEE International Conference on Signal, Information and Data Processing</i>, Zhuhai, China, 2024.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10867997" rel="noopener" target="_blank">Link</a><a href="https://arxiv.org/abs/2410.07543" rel="noopener" target="_blank">arXiv</a></div></div>
+</article>
+<article class="pub-card" data-search="雷达学报 微多普勒角点 Non-Local 穿墙雷达 步态异常终止 2024" data-type="journal chinese">
+<div class="venue"><span class="idx">12</span><span class="label">雷达学报 · EI</span></div>
+<div><div class="pub-title">基于微多普勒角点特征与 Non-Local 机制的穿墙雷达人体步态异常终止行为辨识技术</div><div class="pub-authors">杨小鹏，高炜程，渠晓东</div><div class="pub-meta"><i>雷达学报（中英文）</i>, 2024, 13(1): 68–86.</div><div class="links"><a href="https://radars.ac.cn/article/doi/10.12000/JR23181" rel="noopener" target="_blank">Link</a><a href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Based-on-M-D-Corner-Feature-and-Non-Local-Net" rel="noopener" target="_blank">GitHub</a></div></div>
+</article>
+<article class="pub-card" data-search="计算机工程与应用 多链路 全连接 条件随机场 穿墙雷达 人体行为识别 2022" data-type="journal chinese">
+<div class="venue"><span class="idx">13</span><span class="label">计算机工程与应用 · EI</span></div>
+<div><div class="pub-title">多链路全连接条件随机场的穿墙雷达人体行为识别方法</div><div class="pub-authors">杨小鹏，高炜程，渠晓东，兰天，龚俊波</div><div class="pub-meta"><i>计算机工程与应用</i>, 2022, vol. 58.</div></div>
+</article>
+<article class="pub-card" data-search="Azimuth Sidelobe Suppression Phase Nonuniform Quantized Coherence Factor TAES 2025" data-type="journal">
+<div class="venue"><span class="idx">14</span><span class="label">IEEE TAES · SCI Q1</span></div>
+<div><div class="pub-title">Azimuth Sidelobe Suppression Method for Through-the-Wall Radar Based on Phase Nonuniform Quantized Coherence Factor</div><div class="pub-authors">X. Yang, H. Meng, Z. Ma, X. Qu, W. Gao, and Y. Zhao</div><div class="pub-meta"><i>IEEE Transactions on Aerospace and Electronic Systems</i>, vol. 61, no. 3, pp. 7140–7152, 2025.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10852205" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Robust Lightweight 3D Reconstruction Buried Threats Multi-view GPR Data IEEE IoT 2026" data-type="journal">
+<div class="venue"><span class="idx">15</span><span class="label">IEEE IoTJ · SCI Q1</span></div>
+<div><div class="pub-title">Robust and Lightweight 3D Reconstruction of Buried Threats Using Multi-view GPR Data</div><div class="pub-authors">S. Sheng, X. Yang, W. Gao, Z. Wang, J. Gong, and T. Lan</div><div class="pub-meta"><i>IEEE Internet of Things Journal</i>, Early Access, 2026.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/11471788" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Multipath Ghost Recognition Suppression Template Matching Indoor Human Detection Location IEEE IoT 2025" data-type="journal">
+<div class="venue"><span class="idx">16</span><span class="label">IEEE IoTJ · SCI Q1</span></div>
+<div><div class="pub-title">Multipath Ghost Recognition and Suppression Method Based on Template Matching for Indoor Human Detection and Location</div><div class="pub-authors">X. Yang, H. Meng, X. Qu, W. Gao, and F. Liu</div><div class="pub-meta"><i>IEEE Internet of Things Journal</i>, vol. 12, no. 14, pp. 27280–27290, 2025.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10970020" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Through-the-Wall Radar Imaging Grating-Lobe Sidelobe Suppression Imaginary Sign Coherence Factor SPL 2024" data-type="journal">
+<div class="venue"><span class="idx">17</span><span class="label">IEEE SPL · SCI Q2</span></div>
+<div><div class="pub-title">Through-the-Wall Radar Imaging Grating-Lobe and Sidelobe Suppression Method Based on Imaginary Sign Coherence Factor</div><div class="pub-authors">X. Yang, H. Meng, X. Qu, and W. Gao</div><div class="pub-meta"><i>IEEE Signal Processing Letters</i>, vol. 31, pp. 2120–2124, 2024.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10634754" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Multibit Coherence Factor Through-the-Wall Radar Azimuth Sidelobe Suppression ICSIDP 2024" data-type="conference">
+<div class="venue"><span class="idx">18</span><span class="label">IEEE ICSIDP · EI</span></div>
+<div><div class="pub-title">A Through-the-Wall Radar Azimuth Sidelobe Suppression Based on Multibit Coherence Factor</div><div class="pub-authors">H. Meng, X. Yang, X. Qu, W. Gao, Z. Ma, and D. Shi</div><div class="pub-meta"><i>IEEE ICSIDP</i>, Zhuhai, China, 2024.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10868957" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="Human Activity Micro-Doppler Corner Feature Representation Dual-Threshold Harris Extractor Through-the-Wall Radar ICSIDP 2024" data-type="conference">
+<div class="venue"><span class="idx">19</span><span class="label">IEEE ICSIDP · EI</span></div>
+<div><div class="pub-title">Human Activity Micro-Doppler Corner Feature Representation Method Based on Dual-Threshold Harris Extractor for Through-the-Wall Radar</div><div class="pub-authors">J. Feng, Y. Xu, K. Dong, S. Zhao, M. Wang, and W. Gao</div><div class="pub-meta"><i>IEEE ICSIDP</i>, Zhuhai, China, 2024.</div><div class="links"><a href="https://ieeexplore.ieee.org/document/10868920" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+<article class="pub-card" data-search="雷达学报 探地雷达 多阶段 级联 U-Net 墙内小目标 三维重建 2024" data-type="journal chinese">
+<div class="venue"><span class="idx">20</span><span class="label">雷达学报 · EI</span></div>
+<div><div class="pub-title">探地雷达多阶段级联 U-Net 墙内小目标三维重建方法</div><div class="pub-authors">兰天，盛世文，孙熙韬，高炜程，杨小鹏</div><div class="pub-meta"><i>雷达学报（中英文）</i>, 2024, 13(6): 1184–1201.</div><div class="links"><a href="https://radars.ac.cn/article/doi/10.12000/JR24163" rel="noopener" target="_blank">Link</a></div></div>
+</article>
+</div>
+</div>
+<div class="card column-panel publication-panel reveal">
+<div class="panel-title-row">
+<h3>Research in Interest · 兴趣研究 / 预印本</h3>
+</div>
+<div class="pub-list reveal preprint-list" id="preprintList">
+<article class="pub-card" data-search="Through-the-Wall Radar Human Activity Recognition WITHOUT Using Neural Networks arXiv 2025" data-type="preprint"><div class="venue"><span class="idx">P1</span><span class="label">arXiv</span></div><div><div class="pub-title">Through-the-Wall Radar Human Activity Recognition WITHOUT Using Neural Networks</div><div class="pub-authors">W. Gao</div><div class="pub-meta"><i>arXiv</i>:2506.05169, 2025.</div><div class="links"><a href="https://arxiv.org/abs/2506.05169" rel="noopener" target="_blank">arXiv</a><a href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Without-Using-Neural-Networks" rel="noopener" target="_blank">GitHub</a><a href="https://zhuanlan.zhihu.com/p/1914036350941901951" rel="noopener" target="_blank">Zhihu</a></div></div></article>
+<article class="pub-card" data-search="Low-Cost Accurate Radar-Based Human Motion Direction Determination arXiv 2025" data-type="preprint"><div class="venue"><span class="idx">P2</span><span class="label">arXiv</span></div><div><div class="pub-title">Exploration of Low-Cost but Accurate Radar-Based Human Motion Direction Determination</div><div class="pub-authors">W. Gao</div><div class="pub-meta"><i>arXiv</i>:2507.22567, 2025.</div><div class="links"><a href="https://arxiv.org/abs/2507.22567" rel="noopener" target="_blank">arXiv</a><a href="https://github.com/JoeyBGOfficial/Low-Cost-Accurate-Radar-Based-Human-Motion-Direction-Determination" rel="noopener" target="_blank">GitHub</a><a href="https://zhuanlan.zhihu.com/p/1934217116569040631" rel="noopener" target="_blank">Zhihu</a></div></div></article>
+<article class="pub-card" data-search="RadHARSimulator V1 Model-Based FMCW Radar Human Activity Recognition Simulator arXiv 2025" data-type="preprint"><div class="venue"><span class="idx">P3</span><span class="label">arXiv</span></div><div><div class="pub-title">RadHARSimulator V1: Model-Based FMCW Radar Human Activity Recognition Simulator</div><div class="pub-authors">W. Gao</div><div class="pub-meta"><i>arXiv</i>:2509.06751, 2025.</div><div class="links"><a href="https://arxiv.org/abs/2509.06751" rel="noopener" target="_blank">arXiv</a><a href="https://github.com/JoeyBGOfficial/RadHARSimulatorV1-Model-Based-FMCW-Radar-Human-Activity-Recognition-Simulator" rel="noopener" target="_blank">GitHub</a><a href="https://zhuanlan.zhihu.com/p/1948739578690245356" rel="noopener" target="_blank">Zhihu</a></div></div></article>
+<article class="pub-card" data-search="RadHARSimulator V2 Video to Doppler Generator arXiv 2025" data-type="preprint"><div class="venue"><span class="idx">P4</span><span class="label">arXiv</span></div><div><div class="pub-title">RadHARSimulator V2: Video to Doppler Generator</div><div class="pub-authors">W. Gao</div><div class="pub-meta"><i>arXiv</i>:2511.09022, 2025.</div><div class="links"><a href="https://arxiv.org/abs/2511.09022" rel="noopener" target="_blank">arXiv</a><a href="https://github.com/JoeyBGOfficial/RadHARSimulatorV2-Video-to-Doppler-Generator" rel="noopener" target="_blank">GitHub</a><a href="https://zhuanlan.zhihu.com/p/1971884869161289703" rel="noopener" target="_blank">Zhihu</a></div></div></article>
+<article class="pub-card" data-search="Represent Micro-Doppler Signature in Orders arXiv 2026" data-type="preprint"><div class="venue"><span class="idx">P5</span><span class="label">arXiv</span></div><div><div class="pub-title">Represent Micro-Doppler Signature in Orders</div><div class="pub-authors">W. Gao</div><div class="pub-meta"><i>arXiv</i>:2602.12985, 2026.</div><div class="links"><a href="https://arxiv.org/abs/2602.12985" rel="noopener" target="_blank">arXiv</a><a href="https://github.com/JoeyBGOfficial/Represent-Micro-Doppler-Signature-in-Orders" rel="noopener" target="_blank">GitHub</a><a href="https://zhuanlan.zhihu.com/p/2009230057307133083" rel="noopener" target="_blank">Zhihu</a></div></div></article>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="projects">
+<div class="wrap">
+<div class="section-head reveal">
+<div>
+<span class="eyebrow">Open Source</span>
+<h2>Code, simulators, and reproducible radar tools.</h2>
+</div>
+</div>
+<div class="project-stage">
+<div class="card video-card reveal">
+<div class="video-frame">
+<video controls="" playsinline="" preload="metadata" src="RadHARAGT.mp4"></video>
+</div>
 
-    <header>
-        <div class="header-content">
-            <nav>
-                <ul>
-                    <li><a href="#home">Home (首页)</a></li>
-                    <li><a href="#about">About Me (个人简介)</a></li>
-                    <li><a href="#publications">Publications (学术成果)</a></li>
-                    <li><a href="#activities">Academic Activities (学术活动)</a></li>
-                    <li><a href="#awards">Awards & Titles (奖励及荣誉)</a></li>
-                    <li><a href="#contact">Contact (联系方式)</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- 1. Home Section -->
-    <div id="home" class="snap-section hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1>Weicheng Gao<br>Research</h1>
-                <div class="hero-buttons">
-                    <a href="https://github.com/JoeyBGOfficial" target="_blank" class="btn">GitHub</a>
-                    <a href="https://radar.bit.edu.cn/szdw/jsfc/gyjsjs/tzld1/bb18d2ab2b5745cfa4189518b91213f4.htm" target="_blank" class="btn">Mentor</a>
-                </div>
-            </div>
-            <img src="GWC.jpg" alt="Photo of Weicheng Gao" class="hero-photo">
-        </div>
-    </div>
-
-    <!-- 2. About Me Section -->
-    <div id="about" class="snap-section section-white">
-        <div class="about-content">
-            <img src="BIT.png" alt="Beijing Institute of Technology Logo" class="about-photo">
-            <div class="about-text">
-                <h2>About Me (个人简介)</h2>
-
-                <h3>Education Experience (教育经历)</h3>
-                <p>
-                    2018.09~2022.06, Beijing Institute of Technology (BIT), Xu Teli Class of Excellence, Bachelor's Degree
-                </p>
-                <p>
-                    2018.09~2022.06，北京理工大学，徐特立英才班，本科
-                </p>
-                <p>
-                    2022.09~Now, BIT, School of Information and Electronics, Doctor's Degree
-                </p>
-                <p>
-                    2022.09~至今，北京理工大学，信息与电子学院，博士
-                </p>
-
-                <h3>Research & Team (研究方向与团队)</h3>
-                <p>
-                    I am a proud member of the Radar Research Institute at BIT, guided by professor XiaopengYang. My research topic includes mathematical and modeling theory of signal processing, through-the-wall radar human activity recognition. Our team is dedicated to advancing the frontiers of urban radar technologies and applications.
-                </p>
-                <p>
-                    我是北京理工大学雷达技术研究院的博士生，师从杨小鹏教授。我的研究方向为信号处理中的数学与建模理论，穿墙雷达人体行为识别技术。我们团队致力于拓展城市雷达技术与应用的研究边界。
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. Publications Section -->
-    <div id="publications" class="snap-section section-lightgreen">
-        <div class="container">
-            <!-- Paper Image Gallery -->
-            <div class="paper-gallery">
-                <img src="Paper1.png" alt="Cover of Paper 1" class="paper-img">
-                <img src="Paper2.png" alt="Cover of Paper 2" class="paper-img">
-                <img src="Paper3.png" alt="Cover of Paper 3" class="paper-img">
-                <img src="Paper4.png" alt="Cover of Paper 4" class="paper-img">
-            </div>
-
-            <h2>Publications (学术成果)</h2>
-
-            <h3>Published Paper (发表论文)</h3>
-<ul>
-    <li><strong>[1] (IEEE TGRS, SCI JCR Q1)</strong>W. Gao, X. Yang, X. Qu and T. Lan, "TWR-MCAE: A Data Augmentation Method for Through-the-Wall Radar Human Motion Recognition," in <i>IEEE Transactions on Geoscience and Remote Sensing</i>, vol. 60, pp. 1-17, 2022. <a href="https://ieeexplore.ieee.org/document/9915621">[Link]</a> <a href="https://zhuanlan.zhihu.com/p/649340843">[Zhihu]</a></li>
-    <li><strong>[2] (IEEE TGRS, SCI JCR Q1)</strong>X. Qu, W. Gao, H. Meng, Y. Zhao and X. Yang, "Indoor Human Behavior Recognition Method Based on Wavelet Scattering Network and Conditional Random Field Model," in <i>IEEE Transactions on Geoscience and Remote Sensing</i>, vol. 61, pp. 1-15, 2023. <a href="https://ieeexplore.ieee.org/document/10124443">[Link]</a> <a href="https://zhuanlan.zhihu.com/p/649340843">[Zhihu]</a></li>
-    <li><strong>[3] (IEEE IoT, SCI JCR Q1)</strong>X. Yang, W. Gao, X. Qu, P. Yin, H. Meng and A. E. Fathy, "A Lightweight Multiscale Neural Network for Indoor Human Activity Recognition Based on Macro and Micro-Doppler Features," in <i>IEEE Internet of Things Journal</i>, vol. 10, no. 24, pp. 21836-21854, 2023. <a href="https://ieeexplore.ieee.org/document/10206026">[Link]</a> <a href="https://zhuanlan.zhihu.com/p/649340843">[Zhihu]</a></li>
-    <li><strong>[4] (IEEE TMTT, SCI JCR Q1)</strong>X. Yang, W. Gao, X. Qu, Z. Ma and H. Zhang, "Through-the-Wall Radar Human Activity Micro-Doppler Signature Representation Method Based on Joint Boulic-Sinusoidal Pendulum Model," in <i>IEEE Transactions on Microwave Theory and Techniques</i>, vol. 73, no. 2, pp. 1248-1263, 2025. <a href="https://ieeexplore.ieee.org/document/10644143">[Link]</a> <a href="https://zhuanlan.zhihu.com/p/711643123">[Zhihu]</a></li>
-    <li><strong>[5] (IEEE TAES, SCI JCR Q1)</strong>X. Yang, W. Gao, X. Qu and H. Meng, "Generalizable Indoor Human Activity Recognition Method Based on Micro-Doppler Corner Point Cloud and Dynamic Graph Learning," in <i>IEEE Transactions on Aerospace and Electronics Systems</i>, vol. 61, no. 2, pp. 5195-5209, 2024. <a href="https://ieeexplore.ieee.org/document/10799206">[Link]</a> <a href="https://zhuanlan.zhihu.com/p/711643123">[Zhihu]</a></li>
-    <li><strong>[6] (IEEE SPL, SCI, JCR Q2)</strong>W. Gao, X. Qu, H. Meng, X. Sun and X. Yang, "Adaptive Micro-Doppler Corner Feature Extraction Method Based on Difference of Gaussian Filter and Deformable Convolution," in <i>IEEE Signal Processing Letters</i>, vol. 31, pp. 860-864, 2024. <a href="https://ieeexplore.ieee.org/document/10473202">[Link]</a> <a href="https://zhuanlan.zhihu.com/p/711643123">[Zhihu]</a></li>
-    <li><strong>[7] (IEEE SPL, SCI, JCR Q2)</strong>W. Gao, S. Liu, J. Wang, X. Qu and X. Yang, "MIMO Through-the-Wall Radar Micro-Doppler Signature Augmentation Method Based on Multi-Channel Information Fusion," in <i>IEEE Signal Processing Letters</i>, vol. 33, pp. 579-583, 2026. <a href="https://ieeexplore.ieee.org/document/11345966">[Link]</a> <a href="https://github.com/JoeyBGOfficial/MIMO-Through-the-Wall-Radar-Micro-Doppler-Signature-Augmentation">[GitHub]</a></li>
-    <li><strong>[8] (IEEE SPL, SCI, JCR Q2)</strong>W. Gao, K. Dong, J. Feng, Y. Xu, X. Qu and X. Yang, "MIMO Through-the-Wall Radar Micro-Doppler Signature Representation Under Limited Data Using Heterogeneous Transfer Learning," in <i>IEEE Signal Processing Letters</i>, 2026. <a href="https://ieeexplore.ieee.org/document/11456564">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Heterogeneous-Transfer-Learning-Based-MIMO-Through-the-Wall-Radar-Micro-Doppler-Representation">[GitHub]</a></li>
-    <li><strong>[9] (APSIPA, EI)</strong>W. Gao, X. Yang, X. Qu, J. Liao, Z. Yin and D. Zhang, "Indoor Human Motion Recognition Method Based on Kernel-Distance Doppler Velocity Estimation and Lightweight Network," in <i>Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC)</i>, Chiang Mai, Thailand, 2022. <a href="https://ieeexplore.ieee.org/document/9980106">[Link]</a></li>
-    <li><strong>[10] (IEEE MAPE, EI)</strong>W. Gao, X. Yang, T. Lan, X. Qu and J. Gong, "Triple-Link Fusion Decision Method for Through-the-Wall Radar Human Motion Recognition," in <i>IEEE International Symposium on Microwave, Antenna, Propagation and EMC Technologies for Wireless Communications (MAPE)</i>, Chengdu, China, 2022. <a href="https://ieeexplore.ieee.org/document/9935178">[Link]</a></li>
-    <li><strong>[11] (IEEE ICSIDP, EI)</strong>W. Gao, X. Qu and X. Yang, "Generalization Ability Analysis of Through-the-Wall Radar Human Activity Recognition," in <i>IEEE International Conference on Signal, Information and Data Processing (ICSIDP)</i>, Zhuhai, China, 2024. <a href="https://ieeexplore.ieee.org/document/10867997">[Link]</a></li>
-    <li><strong>[12] (雷达学报, EI)</strong>杨小鹏, 高炜程, 渠晓东. 基于微多普勒角点特征与Non-Local机制的穿墙雷达人体步态异常终止行为辨识技术[J]. <i>雷达学报</i>, 2024, 13(1). <a href="https://radars.ac.cn/article/doi/10.12000/JR23181">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Based-on-M-D-Corner-Feature-and-Non-Local-Net">[GitHub]</a></li>
-    <li><strong>[13] (计算机工程与应用, EI)</strong>杨小鹏, 高炜程, 渠晓东, 兰天, 龚俊波. 多链路全连接条件随机场的穿墙雷达人体行为识别方法[J]. <i>计算机工程与应用</i>, 2022, 58.
-    <li><strong>[14] (IEEE TAES, SCI JCR Q1)</strong>X. Yang, H. Meng, Z. Ma, X. Qu, W. Gao and Y. Zhao, "Azimuth Sidelobe Suppression Method for Through-the-Wall Radar Based on Phase Nonuniform Quantized Coherence Factor," in <i>IEEE Transactions on Aerospace and Electronic Systems</i>, vol. 61, no. 3, pp. 7140-7152, 2025. <a href="https://ieeexplore.ieee.org/document/10852205">[Link]</a></li>
-    <li><strong>[15] (IEEE IoT, SCI JCR Q1)</strong>S. Sheng, X. Yang, W. Gao, Z. Wang, J. Gong and T. Lan, "Robust and Lightweight 3D Reconstruction of Buried Threats Using Multi-view GPR Data," in <i>IEEE Internet of Things Journal</i>, 2026. <a href="https://ieeexplore.ieee.org/document/11471788">[Link]</a></li>
-    <li><strong>[16] (IEEE IoT, SCI JCR Q1)</strong>X. Yang, H. Meng, X. Qu, W. Gao and F. Liu, "Multipath Ghost Recognition and Suppression Method Based on Template Matching for Indoor Human Detection and Location," in <i>IEEE Internet of Things Journal</i>, vol. 12, no. 14, pp. 27280-27290, 2025. <a href="https://ieeexplore.ieee.org/document/10970020">[Link]</a></li>
-    <li><strong>[17] (IEEE SPL, SCI JCR Q2)</strong>X. Yang, H. Meng, X. Qu, W. Gao, "Through-the-Wall Radar Imaging Grating-lobe and Sidelobe Suppression Method Based on Imaginary Sign Coherence Factor," in <i>IEEE Signal Processing Letters</i>, vol. 31, pp. 2120-2124, 2024. <a href="https://ieeexplore.ieee.org/document/10634754">[Link]</a></li>
-    <li><strong>[18] (IEEE ICSIDP, EI)</strong>H. Meng, X. Yang, X. Qu, W. Gao, Z. Ma and D. Shi, "A Through-the-Wall Radar Azimuth Sidelobe Suppression Based on Multibit Coherence Factor," in <i>IEEE International Conference on Signal, Information and Data Processing (ICSIDP)</i>, Zhuhai, China, 2024. <a href="https://ieeexplore.ieee.org/document/10868957">[Link]</a></li>
-    <li><strong>[19] (IEEE ICSIDP, EI)</strong>J. Feng, Y. Xu, K. Dong, S. Zhao, M. Wang and W. Gao, "Human Activity Micro-Doppler Corner Feature Representation Method Based on Dual-Threshold Harris Extractor for Through-the-Wall Radar," in <i>IEEE International Conference on Signal, Information and Data Processing (ICSIDP)</i>, Zhuhai, China, 2024. <a href="https://ieeexplore.ieee.org/document/10868920">[Link]</a></li>
-    <li><strong>[20] (雷达学报, EI)</strong>兰天, 盛世文, 孙熙韬, 高炜程, 杨小鹏. 探地雷达多阶段级联U-Net墙内小目标三维重建方法[J]. <i>雷达学报</i>, 2024, 13(6). <a href="https://radars.ac.cn/article/doi/10.12000/JR24163">[Link]</a></li>
+</div>
+<div class="project-side">
+<div class="project-grid project-grid-compact reveal">
+<a class="project-card" href="https://github.com/JoeyBGOfficial/RadHARSimulatorV1-Model-Based-FMCW-Radar-Human-Activity-Recognition-Simulator" rel="noopener" target="_blank"><div><h3>RadHARSimulator V1</h3><p>Model-based FMCW radar HAR simulator with RTM/DTM generation and end-to-end processing.</p></div></a>
+<a class="project-card" href="https://github.com/JoeyBGOfficial/RadHARSimulatorV2-Video-to-Doppler-Generator" rel="noopener" target="_blank"><div><h3>RadHARSimulator V2</h3><p>Video-to-Doppler generator linking computer vision pose estimation with radar echo simulation.</p></div></a>
+<a class="project-card" href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Without-Using-Neural-Networks" rel="noopener" target="_blank"><div><h3>TWR HAR Without NN</h3><p>Interpretable through-the-wall radar HAR pipeline built without neural network training.</p></div></a>
+<a class="project-card" href="https://github.com/JoeyBGOfficial/MIMO-Through-the-Wall-Radar-Micro-Doppler-Signature-Augmentation" rel="noopener" target="_blank"><div><h3>MIMO μD Augmentation</h3><p>Multi-channel information fusion for MIMO TWR micro-Doppler signature augmentation.</p></div></a>
+<a class="project-card" href="https://github.com/JoeyBGOfficial/Heterogeneous-Transfer-Learning-Based-MIMO-Through-the-Wall-Radar-Micro-Doppler-Representation" rel="noopener" target="_blank"><div><h3>Heterogeneous Transfer</h3><p>Limited-data MIMO micro-Doppler representation via heterogeneous transfer learning.</p></div></a>
+<a class="project-card" href="https://github.com/JoeyBGOfficial/Represent-Micro-Doppler-Signature-in-Orders" rel="noopener" target="_blank"><div><h3>μD in Orders</h3><p>Chebyshev-time representation for compact and physically meaningful micro-Doppler features.</p></div></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="activities">
+<div class="wrap">
+<div class="section-head reveal">
+<div>
+<span class="eyebrow">Academic Activities</span>
+<h2>Talks, forums, and community engagement.</h2>
+</div>
+</div>
+<div class="activity-board">
+<aside aria-label="Academic activity gallery" class="vertical-media-stack activity-gallery reveal">
+<img alt="Academic activity" src="Activity.png"/>
+</aside>
+<div class="card list-card reveal">
+<h3>Invited Talks &amp; Forums · 特邀报告与论坛</h3>
+<ul class="soft-list">
+<li><p><b>Invited Talk</b>, Radar Perception Forum, “New Youth in Autonomous Driving” Lecture Series by Zhidx.com, 2024.</p><p class="cn">2024年智东西“自动驾驶新青年讲座”雷达感知论坛，作特邀报告。</p></li>
+<li><p>Doctoral Forum on “Multi-source Information Sensing,” Chinese Institute of Electronics, 2024 — <b>Best Report Award</b>.</p><p class="cn">2024年中国电子学会“多源信息感知”博士生论坛，作分会场报告，获最佳报告奖。</p></li>
+<li><p>IEEE ICSIDP, 2024 — <b>Best Paper Award</b>.</p><p class="cn">2024年 IEEE ICSIDP 国际会议，作分会场报告，获最佳论文奖。</p></li>
+<li><p>The 5th Doctoral Forum of Journal of Radars, 2025 — <b>Best Report Award</b>.</p><p class="cn">2025年雷达学报第五届博士论坛，作分会场报告，获最佳报告奖。</p></li>
+<li><p>Xu Teli Academic Forum, Beijing Institute of Technology, 2023 — <b>Best Paper Award</b>.</p><p class="cn">2023年北理工徐特立学术论坛，作分会场报告，获最佳论文奖。</p></li>
+<li><p>The 4th Doctoral Forum of Journal of Radars, 2024 — <b>Excellent Report Award</b>.</p><p class="cn">2024年雷达学报第四届博士论坛，作分会场报告，获优秀报告奖。</p></li>
+<li><p>APSIPA ASC, 2022; IEEE MAPE, 2022; Xu Teli Academic Forum, 2022.</p><p class="cn">2022年 APSIPA、IEEE MAPE 及北理工徐特立学术论坛分会场报告。</p></li>
 </ul>
-
-            <h3>Research in Interest (兴趣研究)</h3>
-<ul>
-    <li><strong>[1] (arXiv Preprint)</strong>W. Gao, "Through-the-Wall Radar Human Activity Recognition WITHOUT Using Neural Networks," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2506.05169">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Through-the-Wall-Radar-Human-Activity-Recognition-Without-Using-Neural-Networks">[GitHub]</a> <a href="https://zhuanlan.zhihu.com/p/1914036350941901951">[Zhihu]</a></li>
-    <li><strong>[2] (arXiv Preprint)</strong>W. Gao, "Exploration of Low-Cost but Accurate Radar-Based Human Motion Direction Determination," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2507.22567">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Low-Cost-Accurate-Radar-Based-Human-Motion-Direction-Determination">[GitHub]</a> <a href="https://zhuanlan.zhihu.com/p/1934217116569040631">[Zhihu]</a></li>
-    <li><strong>[3] (arXiv Preprint)</strong>W. Gao, "RadHARSimulator V1: Model-Based FMCW Radar Human Activity Recognition Simulator," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2509.06751">[Link]</a> <a href="https://github.com/JoeyBGOfficial/RadHARSimulatorV1-Model-Based-FMCW-Radar-Human-Activity-Recognition-Simulator">[GitHub]</a> <a href="https://zhuanlan.zhihu.com/p/1948739578690245356">[Zhihu]</a></li>
-    <li><strong>[4] (arXiv Preprint)</strong>W. Gao, "RadHARSimulator V2: Video to Doppler Generator," in <i>arXiv (Cornell University)</i>, 2025. <a href="https://arxiv.org/abs/2511.09022">[Link]</a> <a href="https://github.com/JoeyBGOfficial/RadHARSimulatorV2-Video-to-Doppler-Generator">[GitHub]</a> <a href="https://zhuanlan.zhihu.com/p/1971884869161289703">[Zhihu]</a></li>
-    <li><strong>[5] (arXiv Preprint)</strong>W. Gao, "Represent Micro-Doppler Signature in Orders," in <i>arXiv (Cornell University)</i>, 2026. <a href="https://arxiv.org/abs/2602.12985">[Link]</a> <a href="https://github.com/JoeyBGOfficial/Represent-Micro-Doppler-Signature-in-Orders">[GitHub]</a> <a href="https://zhuanlan.zhihu.com/p/2009230057307133083">[Zhihu]</a></li>
+</div>
+<div class="card list-card reveal">
+<h3>Cooperation &amp; Community · 合作报告与社区服务</h3>
+<ul class="soft-list">
+<li><p>Founder, “Signal, Machine Learning, and Radar” Column on Zhihu Technology; awarded <b>Haiyan Project</b> High-Quality Creator.</p><p class="cn">知乎科技领域《信号，机器学习与雷达》系列专栏创始人，获“海盐计划”优质创作者称号。</p></li>
+<li><p>Assisted mentor with keynote/invited talks at IET International Radar Conference 2023 and 2025.</p><p class="cn">协助导师在 2023 年 IET 国际雷达会议作大会报告、2025 年 IET 国际雷达会议作特邀报告。</p></li>
+<li><p>Assisted mentor with invited talks at IEEE ICSP/ICICSP 2023, Radar Future Conference 2024, Electromagnetic Spectrum Conference 2024, and China Electronic Information Conference 2025.</p><p class="cn">协助导师在 IEEE ICICSP、雷达未来大会、电磁频谱大会、电子信息年会等会议作特邀报告。</p></li>
 </ul>
+</div>
+</div>
+</div>
+</section>
+<section id="awards">
+<div class="wrap">
+<div class="section-head reveal">
+<div>
+<span class="eyebrow">Awards &amp; Titles</span>
+<h2>Honors, service, and student mentoring.</h2>
+</div>
+</div>
+<div class="awards-board">
+<div class="card award-media reveal">
+<img alt="NSFC Young Student Basic Research Program award document" src="Awards.jpg"/>
+</div>
+<div class="card award-list-panel reveal">
+<div class="award-grid reveal">
+<div class="award-card"><b>NSFC Young Student Basic Research Program</b><p>国家自然科学基金青年博士基础研究项目获得者。</p></div>
+<div class="award-card"><b>China Radar Industry Association</b><p>2023年度技术发明一等奖（序6）。</p></div>
+<div class="award-card"><b>IEEE Young Professionals</b><p>Selected member of IEEE Young Professionals.</p></div>
+<div class="award-card"><b>CAST Program of Excellence</b><p>入选中国科协科技创新后备人才培养计划。</p></div>
+<div class="award-card"><b>Share Cup · National Second Prize</b><p>2022年第九届共享杯科创竞赛全国二等奖（序1）。</p></div>
+<div class="award-card"><b>Excellent Undergraduate Thesis of Beijing</b><p>2022年北京市优秀本科毕业设计。</p></div>
+<div class="award-card"><b>F5000 Top Articles</b><p>2025中国精品科技期刊顶尖论文 F5000 奖（学生序1）。</p></div>
+<div class="award-card"><b>Journal of Radars Annual Excellent Paper</b><p>2024年雷达学报年度优秀论文奖（学生序1）。</p></div>
+<div class="award-card"><b>Reviewer Service</b><p>Reviewer for IEEE AESM, TGRS, IoTJ, TIM, TMTT and other SCI journals; 40+ reviews completed.</p></div>
+<div class="award-card"><b>Best / Excellent Reports</b><p>中国电子学会博士生论坛、雷达学报博士论坛等最佳/优秀报告奖。</p></div>
+<div class="award-card"><b>BIT Hump Pilot Program</b><p>入选北京理工大学“驼峰领航”拔尖创新人才培育计划。</p></div>
+<div class="award-card"><b>National Scholarship</b><p>2025年博士研究生国家奖学金；2022/2023年博士生特等奖学金。</p></div>
+<div class="award-card"><b>BIT Honors</b><p>优秀学生、优秀毕业生、优秀德育答辩奖、优秀团员等。</p></div>
+<div class="award-card"><b>Century Cup</b><p>2021年北京理工大学“世纪杯”科创竞赛一等奖（序1）。</p></div>
+<div class="award-card"><b>Radar Club &amp; Peer Mentor</b><p>北京理工大学雷达俱乐部副部长、学生顾问；2020级物理强基班朋辈导师。</p></div>
+<div class="award-card"><b>Undergraduate Innovation Program</b><p>作为大创指导研究生，指导学生团队获 IEEE ICSIDP Best Paper、“启研”计划、特立学生科技创新团队等。</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="contact">
+<div class="wrap">
+<div class="section-head reveal">
+<div>
+<span class="eyebrow">Contact</span>
+<h2>Profiles and contact information.</h2>
+</div>
+</div>
+<div class="contact-grid contact-grid-polished">
+<div class="card contact-card contact-hero-card reveal">
+<span class="eyebrow small-eyebrow">Let us connect</span>
+<h3>Academic collaboration, radar research, and open-source communication.</h3>
+<p class="muted">I welcome discussions on radar signal processing, through-the-wall sensing, radar-based human activity recognition, and reproducible research tools.</p>
+<p class="cn">欢迎围绕雷达信号处理、穿墙感知、雷达人体行为识别和可复现科研工具等方向交流合作。</p>
+<div class="contact-lines">
+<div class="contact-line"><b>Address:</b> Building 10, Information Science Experimental Building, Beijing Institute of Technology, 5 Zhongguancun South Street, Haidian District, Beijing. 北京市海淀区中关村南大街5号北京理工大学10号信息科学实验楼。</div>
+<div class="contact-line"><b>Email:</b> <a href="mailto:JoeyBG@126.com">JoeyBG@126.com</a></div>
+<div class="contact-line"><b>WeChat:</b> JoeyBG_Official</div>
+<div class="contact-line"><b>QQ:</b> 1416367031</div>
+<div class="contact-line"><b>Tel:</b> +86-17801204600</div>
+</div>
+</div>
+<div class="card contact-card reveal">
+<h3>Other Homepages · 其它主页</h3>
+<div class="profile-grid profile-grid-polished" style="margin-top: 16px;">
+<a class="profile-link" href="https://www.zhihu.com/people/sheng-ge-san-jin-15" rel="noopener" target="_blank"><img alt="Zhihu icon" src="Zhihu.png"/><span><b>Zhihu</b><span>知乎主页</span></span></a>
+<a class="profile-link" href="https://ieeexplore.ieee.org/author/37089574449" rel="noopener" target="_blank"><img alt="IEEE icon" src="IEEE.png"/><span><b>IEEE Xplore</b><span>IEEE 学者主页</span></span></a>
+<a class="profile-link" href="https://www.semanticscholar.org/author/Weicheng-Gao/2051685234" rel="noopener" target="_blank"><img alt="Semantic Scholar icon" src="Semantic.png"/><span><b>Semantic Scholar</b><span>Semantic 学者主页</span></span></a>
+<a class="profile-link" href="https://orcid.org/0000-0002-2719-3645" rel="noopener" target="_blank"><img alt="ORCID icon" src="Orcid.png"/><span><b>ORCID</b><span>0000-0002-2719-3645</span></span></a>
+<a class="profile-link" href="https://github.com/JoeyBGOfficial" rel="noopener" target="_blank"><img alt="GitHub icon" src="GitHub.png"/><span><b>GitHub</b><span>@JoeyBGOfficial</span></span></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<p>© 2026 Weicheng Gao. Last updated: June 2026.</p>
+</footer>
+<script>
+    const progress = document.getElementById('scrollProgress');
+    const navLinks = Array.from(document.querySelectorAll('nav a'));
+    const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
 
-        </div>
-    </div>
+    function updateProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      progress.style.width = pct + '%';
+    }
 
-    <!-- 4. Academic Activities Section -->
-    <div id="activities" class="snap-section section-white">
-        <div class="container">
-            <img src="Activity.png" alt="Photo of an academic activity" class="activity-banner-img">
-            <h2>Academic Activities (学术活动)</h2>
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+        }
+      });
+    }, { rootMargin: '-38% 0px -56% 0px', threshold: 0 });
+    sections.forEach(section => sectionObserver.observe(section));
 
-            <h3>Invited Talks & Forums (特邀报告与论坛)</h3>
-            <ul>
-                <li>
-                    <p><strong>Invited Talk</strong>, Radar Perception Forum, "New Youth in Autonomous Driving" Lecture Series by Zhidx.com, 2024.</p>
-                    <p>2024年智东西“自动驾驶新青年讲座”雷达感知论坛，作<strong>特邀报告</strong>。</p>
-                </li>
-                <li>
-                    <p>Session Report, Doctoral Forum on "Multi-source Information Sensing," Chinese Institute of Electronics, 2024 (<strong>Best Report Award</strong>).</p>
-                    <p>2024年中国电子学会“多源信息感知”博士生论坛，作分会场报告，获<strong>最佳报告奖</strong>。</p>
-                </li>
-                <li>
-                    <p>Session Report, IEEE International Conference on Signal, Information and Data Processing (ICSIDP), 2024 (<strong>Best Paper Award</strong>).</p>
-                    <p>2024年IEEE ICSIDP国际会议，作分会场报告，获<strong>最佳论文奖</strong>。</p>
-                </li>
-                <li>
-                    <p>Session Report, The 5th Doctoral Forum of Journal of Radars, 2025 (<strong>Best Report Award</strong>).</p>
-                    <p>2025年雷达学报第五届博士论坛，作分会场报告，获<strong>最佳报告奖</strong>。</p>
-                </li>
-                <li>
-                    <p>Session Report, Xu Teli Academic Forum, Beijing Institute of Technology, 2023 (<strong>Best Paper Award</strong>).</p>
-                    <p>2023年北理工徐特立学术论坛，作分会场报告，获<strong>最佳论文奖</strong>。</p>
-                </li>
-                <li>
-                    <p>Session Report, The 4th Doctoral Forum of Journal of Radars, 2024 (<strong>Excellent Report Award</strong>).</p>
-                    <p>2024年雷达学报第四届博士论坛，作分会场报告，获<strong>优秀报告奖</strong>。</p>
-                </li>
-                 <li>
-                    <p>Session Report, Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC), 2022.</p>
-                    <p>2022年APSIPA国际会议，作分会场报告。</p>
-                </li>
-                <li>
-                    <p>Session Report, IEEE International Symposium on Microwave, Antenna, Propagation and EMC Technologies (MAPE), 2022.</p>
-                    <p>2022 年IEEE MAPE国际会议，作分会场报告。</p>
-                </li>
-                <li>
-                    <p>Session Report, Xu Teli Academic Forum, Beijing Institute of Technology, 2022.</p>
-                    <p>2022年北理工徐特立学术论坛，作分会场报告。</p>
-                </li>
-            </ul>
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-            <h3>Cooperation Presentations & Community (合作报告与社区服务)</h3>
-            <ul>
-                <li>
-                    <p>Founder, "Signal, Machine Learning, and Radar" Column on Zhihu Technology, awarded "<strong>Haiyan Project</strong>" High-Quality Creator.</p>
-                    <p>知乎科技领域《信号，机器学习与雷达》系列专栏创始人，获“<strong>海盐计划</strong>”优质创作者称号。</p>
-                </li>
-                <li>
-                    <p>Assisted Mentor with Keynote Report, IET International Radar Conference, 2023.</p>
-                    <p>2023年IET国际雷达会议，协助导师作大会报告。</p>
-                </li>
-                <li>
-                    <p>Assisted Mentor with Invited Talk, IET International Radar Conference, 2025.</p>
-                    <p>2025年IET国际雷达会议，协助导师作特邀报告。</p>
-                </li>
-                <li>
-                    <p>Assisted Mentor with Invited Talk, IEEE International Conference on ICSP (ICICSP), 2023.</p>
-                    <p>2023年IEEE ICICSP国际会议，协助导师作特邀报告。</p>
-                </li>
-                 <li>
-                    <p>Assisted Mentor with Invited Talk, Radar Future Conference, 2024.</p>
-                    <p>2024年雷达未来大会，协助导师作特邀报告。</p>
-                </li>
-                <li>
-                    <p>Assisted Mentor with Invited Talk, Electromagnetic Spectrum Conference, 2024.</p>
-                    <p>2024年电磁频谱大会，协助导师作特邀报告。</p>
-                </li>
-                 <li>
-                    <p>Assisted Mentor with Invited Talk, China Electronic Information Conference, 2025.</p>
-                    <p>2025年电子信息年会，协助导师作特邀报告。</p>
-                </li>
-            </ul>      
-        </div>
-    </div>
+    const buttons = Array.from(document.querySelectorAll('.filter-btn'));
+    const searchInput = document.getElementById('pubSearch');
+    const pubCards = Array.from(document.querySelectorAll('.pub-card'));
+    let activeFilter = 'all';
 
-    <!-- 5. Awards & Titles Section -->
-    <div id="awards" class="snap-section section-lightgreen">
-        <div class="container">
-            <h2>Awards & Titles (奖励及荣誉)</h2>
-            
-            <ul>
-                <li>
-                    <p>Recipient of the <strong>National Natural Science Foundation of China Young Student Basic Research Program (Doctoral Candidates)</strong>.</p>
-                    <p><strong>国家自然科学基金青年博士基础研究项目</strong>获得者。</p>
-                </li>
-                <li>
-                    <p><strong>First Prize</strong>, Technology Invention Award, China Radar Industry Association, 2023 (Rank 6).</p>
-                    <p>获2023年度中国雷达行业协会技术发明<strong>一等奖</strong>（序6）。</p>
-                </li>
-                <li>
-                    <p>Selected for the <strong>Young Professionals Program</strong>, IEEE.</p>
-                    <p>入选IEEE <strong>Young Professionals</strong>成员。</p>
-                </li>
-                <li>
-                    <p>Selected for the <strong>Reserve Talent Training Program for Science and Technology Innovation</strong>, China Association for Science and Technology.</p>
-                    <p>入选中国科协<strong>科技创新后备人才培养计划</strong>。</p>
-                </li>
-                <li>
-                    <p><strong>National Second Prize</strong>, The 9th "Share Cup" Science and Technology Innovation Competition, 2022 (Rank 1).</p>
-                    <p>获2022年第九届共享杯科创竞赛<strong>全国二等奖</strong>（序1）。</p>
-                </li>
-                <li>
-                    <p><strong>Excellent Undergraduate Thesis</strong> of Beijing, 2022.</p>
-                    <p>获2022年北京市<strong>优秀本科毕业设计</strong>。</p>
-                </li>
-                <li>
-                    <p><strong>F5000 - Top Articles</strong> in Outstanding S&T Journals of China, 2025 (Student Rank 1).</p>
-                    <p>获2025中国精品科技期刊<strong>顶尖论文F5000奖</strong>（学生序1）。</p>
-                </li>
-                <li>
-                    <p><strong>Annual Excellent Paper Award</strong>, Journal of Radars, 2024 (Student Rank 1).</p>
-                    <p>获2024年雷达学报<strong>年度优秀论文奖</strong>（学生序1）。</p>
-                </li>
-                <li>
-                    <p>Reviewer for top-tier SCI journals including IEEE AESM, IoT, TGRS, TIM, TMTT. Awarded <strong>Excellent Reviewer</strong> for the Journal of Supercomputing. Completed over 40 reviews.</p>
-                    <p>任IEEE AESM、IoT、TGRS、TIM、TMTT等SCI顶级期刊审稿人，获计算理论领域SCI高水平期刊Journal of Supercomputing<strong>优秀审稿人</strong>，累计已完成审稿工作40余篇。</p>
-                </li>
-                <li>
-                    <p><strong>Best Report Award</strong>, Doctoral Forum on "Multi-source Information Sensing," Chinese Institute of Electronics, 2024.</p>
-                    <p>获2024年中国电子学会“多源信息感知”博士生论坛<strong>最佳报告奖</strong>。</p>
-                </li>
-                <li>
-                    <p><strong>Best Report Award</strong>, The 5th Doctoral Forum of Journal of Radars, 2025.</p>
-                    <p>获2025年雷达学报博士论坛<strong>最佳报告奖</strong>。</p>
-                </li>
-                <li>
-                    <p><strong>Excellent Report Award</strong>, The 4th Doctoral Forum of Journal of Radars, 2024.</p>
-                    <p>获2024年雷达学报博士论坛<strong>优秀报告奖</strong>。</p>
-                </li>
-                <li>
-                    <p>Selected for the "<strong>Hump Navigation</strong>" Top-Notch Innovative Talent Training Program, Beijing Institute of Technology, 2022.</p>
-                    <p>入选2022年北京理工大学“<strong>驼峰领航</strong>”拔尖创新人才培育计划。</p>
-                </li>
-                <li>
-                    <p><strong>Best Paper Award</strong>, Xu Teli Academic Forum, Beijing Institute of Technology, 2023 (Rank 1).</p>
-                    <p>获2023年北京理工大学徐特立学术论坛<strong>最佳论文奖</strong>（序1）。</p>
-                </li>
-                <li>
-                    <p><strong>National Scholarship</strong> for Doctoral Students, 2025.</p>
-                    <p>获2025年博士研究生<strong>国家奖学金</strong>。</p>
-                </li>
-                <li>
-                    <p>Excellent Student, Beijing Institute of Technology, 2023.</p>
-                    <p>获2023年北京理工大学优秀学生。</p>
-                </li>
-                <li>
-                    <p>Special Doctoral Scholarship, Beijing Institute of Technology, 2023.</p>
-                    <p>获2023年北京理工大学博士生特等奖学金。</p>
-                </li>
-                <li>
-                    <p>Special Doctoral Scholarship, Beijing Institute of Technology, 2022.</p>
-                    <p>获2022年北京理工大学博士生特等奖学金。</p>
-                </li>
-                <li>
-                    <p>Excellent Graduate, Beijing Institute of Technology, 2022.</p>
-                    <p>获2022年北京理工大学优秀毕业生。</p>
-                </li>
-                <li>
-                    <p>Excellent Undergraduate Thesis, Beijing Institute of Technology, 2022.</p>
-                    <p>获2022年北京理工大学优秀本科毕业设计。</p>
-                </li>
-                <li>
-                    <p>Excellent Moral Education Defense Award, Beijing Institute of Technology, 2022.</p>
-                    <p>获2022年北京理工大学优秀德育答辩奖。</p>
-                </li>
-                <li>
-                    <p>Excellent League Member, Beijing Institute of Technology, 2022.</p>
-                    <p>获2022年北京理工大学优秀团员。</p>
-                </li>
-                <li>
-                    <p>First Prize, "Century Cup" Science and Technology Innovation Competition, Beijing Institute of Technology, 2021 (Rank 1).</p>
-                    <p>获2021年北京理工大学“世纪杯”科创竞赛一等奖（序1）。</p>
-                </li>
-                <li>
-                    <p>Xu Teli College Role Model of the Times, Beijing Institute of Technology, 2020.</p>
-                    <p>获2020年北京理工大学徐特立学院时代青春榜样。</p>
-                </li>
-                <li>
-                    <p>Vice Minister and Student Advisor, Radar Club, Beijing Institute of Technology.</p>
-                    <p>任北京理工大学雷达俱乐部副部长、学生顾问。</p>
-                </li>
-                <li>
-                    <p>Peer Mentor for the 2020 Physics Strengthen-Base Class, awarded "Excellent Peer Mentor," Beijing Institute of Technology.</p>
-                    <p>任北京理工大学2020级物理强基班朋辈导师，获优秀朋辈导师称号。</p>
-                </li>
-                <li>
-                    <p>Graduate Mentor for Undergraduate Innovation Program (UIP), leading teams to win honors such as the <strong>Best Paper Award</strong> at the 2024 IEEE ICSIDP, the "<strong>Qiyan</strong>" Program of the Beijing Natural Science Foundation, and "BIT Teli Student Science and Technology Innovation Team."</p>
-                    <p>任大创指导研究生，获2024年IEEE ICSIDP国际会议<strong>最佳论文奖</strong>、获批“北京市自然科学基金<strong>‘启研’计划</strong>”、“北京理工大学特立学生科技创新团队”等荣誉称号。</p>
-                </li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- 6. Contact Section -->
-    <div id="contact" class="snap-section section-white">
-        <div class="container">
-            <h2>Contact (联系方式)</h2>
+    function applyPublicationFilter() {
+      const q = (searchInput.value || '').trim().toLowerCase();
+      pubCards.forEach(card => {
+        const types = (card.dataset.type || '').split(' ');
+        const searchable = (card.dataset.search + ' ' + card.textContent).toLowerCase();
+        const filterMatch = activeFilter === 'all' || types.includes(activeFilter);
+        const searchMatch = !q || searchable.includes(q);
+        card.classList.toggle('is-hidden', !(filterMatch && searchMatch));
+      });
+    }
 
-            <h3>Other Homepages (其它主页)</h3>
-            <a href="https://www.zhihu.com/people/sheng-ge-san-jin-15" target="_blank" class="homepage-link">
-                <img src="Zhihu.png" alt="Zhihu Homepage" class="homepage-img">
-                <p class="homepage-caption">Zhihu Homepage (知乎主页)</p>
-            </a>
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      buttons.forEach(b => b.classList.toggle('active', b === btn));
+      applyPublicationFilter();
+    }));
+    if (searchInput) searchInput.addEventListener('input', applyPublicationFilter);
 
-            <a href="https://ieeexplore.ieee.org/author/37089574449" target="_blank" class="homepage-link">
-                <img src="IEEE.png" alt="IEEE Homepage" class="homepage-img">
-                <p class="homepage-caption">IEEE Homepage (IEEE学者主页)</p>
-            </a>
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
 
-            <a href="https://www.semanticscholar.org/author/Weicheng-Gao/2051685234" target="_blank" class="homepage-link">
-                <img src="Semantic.png" alt="Semantic Scholar Homepage" class="homepage-img">
-                <p class="homepage-caption">Semantic Scholar Homepage (Semantic学者主页)</p>
-            </a>
+    // Extra smooth page navigation for full-screen 16:9 sections.
+    document.querySelectorAll('nav a[href^="#"], .hero-actions a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', event => {
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        history.replaceState(null, '', anchor.getAttribute('href'));
+      });
+    });
 
-            <a href="https://orcid.org/0000-0002-2719-3645" target="_blank" class="homepage-link">
-                <img src="Orcid.png" alt="Orcid Homepage" class="homepage-img">
-                <p class="homepage-caption">Orcid Homepage (Orcid学者主页)</p>
-            </a>
-
-            <a href="https://github.com/JoeyBGOfficial" target="_blank" class="homepage-link">
-                <img src="GitHub.png" alt="GitHub Homepage" class="homepage-img">
-                <p class="homepage-caption">GitHub Homepage (GitHub主页)</p>
-            </a>
-            
-            <h3 style="margin-top: 60px;">Contact Information (联系信息)</h3>
-            <p>
-                <strong>Address:</strong> Building 10, Information Science Experimental Building Beijing Institute of Technology 5 Zhongguancun South Street Haidian District, Beijing (北京市海淀区中关村南大街5号北京理工大学10号信息科学实验楼).
-            </p>
-            <p>
-                <strong>Email:</strong> <a href="mailto:JoeyBG@126.com">JoeyBG@126.com.</a>
-            </p>
-            <p>
-                <strong>Wechat:</strong> JoeyBG_Official.
-            </p>
-            <p>
-                <strong>Tel:</strong> +86-17801204600.
-            </p>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2025 Weicheng Gao. All rights reserved.</p>
-    </footer>
-
+  </script>
 </body>
 </html>
